@@ -1,0 +1,1367 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm,headheight=14pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{longtable,array}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{pdftitle={Zhuk's Centers and Ternary Absorption},
+  pdfsubject={A self-contained proof, at formalization granularity},pdfauthor={}}
+
+\newtheoremstyle{mainplain}{9pt}{9pt}{\itshape}{}{\bfseries}{.}{0.55em}{}
+\newtheoremstyle{mainroman}{9pt}{9pt}{\normalfont}{}{\bfseries}{.}{0.55em}{}
+\theoremstyle{mainplain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{mainroman}
+\newtheorem{longtheorem}[theorem]{Theorem}
+\newtheorem{longlemma}[theorem]{Lemma}
+\newtheorem{longproposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{convention}[theorem]{Convention}
+
+\setlength{\parindent}{1.25em}\setlength{\parskip}{0pt}\setlength{\emergencystretch}{2em}
+\newcommand{\alphlabels}{\renewcommand{\labelenumi}{\textup{(\alph{enumi})}}%
+  \renewcommand{\theenumi}{\alph{enumi}}}
+\newcommand{\romanlabels}{\renewcommand{\labelenumi}{\textup{(\roman{enumi})}}%
+  \renewcommand{\theenumi}{\roman{enumi}}}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\numberwithin{equation}{section}
+\setcounter{tocdepth}{2}\setcounter{secnumdepth}{2}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Zhuk's centers}\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0.3pt}
+
+\DeclareMathOperator{\Sg}{Sg}
+\DeclareMathOperator{\Clo}{Clo}
+\newcommand{\bA}{\mathbf A}
+\newcommand{\bB}{\mathbf B}
+\newcommand{\bC}{\mathbf C}
+\newcommand{\bD}{\mathbf D}
+\newcommand{\bM}{\mathbf M}
+\newcommand{\ab}{\lhd}
+\newcommand{\abin}{\lhd_{\mathrm{bin}}}
+\newcommand{\aZ}{\lhd_{Z}}
+\newcommand{\Tm}{T_\sigma}
+
+\title{Zhuk's Centers and Ternary Absorption}
+\author{}\date{}
+
+\begin{document}
+\maketitle\vspace{-2.2em}
+\begin{abstract}
+Let $\bA$ and $\bB$ be finite idempotent algebras of a common signature and let
+$R$ be a subdirect subuniverse of $\bA\times\bB$. The \emph{left center} of $R$
+is the set $C$ of elements of $A$ related by $R$ to every element of $B$. We
+give a complete and self-contained proof of Zhuk's theorem that if $\bB$ has a
+Taylor term and has no proper binary absorbing subalgebra, then $C$ absorbs
+$\bA$ --- and, through the Zhuk--Kozik essential doubling trick, that the
+absorption is witnessed by a \emph{ternary} term. Everything is proved from the
+definitions of terms, subuniverses, and generation: the relational description of
+absorption by essential relations, which supplies the passage from unbounded
+arity to ternary arity, is proved here rather than imported. The background
+package of \hyperref[app:background]{Appendix~C} is finite combinatorics and
+elementary set theory only. The document is written to serve as the
+human-readable blueprint for a formal development.
+\end{abstract}
+
+\begin{theorem}[Main theorem]\label{thm:main}
+Let $\sigma$ be a signature without nullary symbols and let $\bA,\bB$ be finite
+idempotent $\sigma$-algebras with nonempty universes. Let $R\le\bA\times\bB$ be
+subdirect and let
+\[
+  C=\{a\in A\;:\;\{a\}\times B\subseteq R\}
+\]
+be its left center. Assume
+\begin{enumerate}\alphlabels\tightlist
+\item some $t\in\Tm(k)$ is Taylor on $B$ \textup{(Definition~\ref{def:taylor})}, and
+\item $\bB$ has no proper binary absorbing subalgebra
+      \textup{(Definition~\ref{def:absorption})}.
+\end{enumerate}
+Then $C$ centrally absorbs $\bA$, and there is a \emph{ternary} term
+$s\in\Tm(3)$ such that
+\[
+ s^{\bA}(C,A,C)\cup s^{\bA}(C,C,A)\cup s^{\bA}(A,C,C)\subseteq C .
+\]
+\end{theorem}
+
+\tableofcontents\clearpage
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+The algebraic approach to the constraint satisfaction problem studies a
+finite relational template through the algebra of its polymorphisms. Zhuk's
+proof of the dichotomy conjecture~\cite{Zhuk} isolated a mechanism that turns a
+single binary relation between two algebras into an absorbing subalgebra of one
+of them. Barto and Kozik's absorption theorem~\cite{BartoKozikCyclic} is the
+older tool it replaces; Brady's notes~\cite{BradyNotes}, whose Section~3.10 this
+document follows, use Zhuk's mechanism to reprove and strengthen it.
+
+The mechanism is this. Given a subdirect $R\le\bA\times\bB$, call
+$C=\{a: \{a\}\times B\subseteq R\}$ the \emph{left center}. If $C$ is neither
+empty nor all of $A$, then $C$ is a nontrivial obstruction inside $\bA$, and one
+expects to convert it into structure. Zhuk's observation is that the conversion
+is forced: applying a Taylor term of $\bB$ to one element of $A$ and several
+elements of $C$ strictly enlarges its $R$-neighborhood in $B$, unless that
+neighborhood is a binary absorbing subalgebra of $\bB$. Iterating the
+enlargement $|B|-1$ times drives the value into $C$. The witnessing term has
+arity $k^{|B|-1}$; the second half of the argument, the Zhuk--Kozik doubling
+trick, collapses that arity to $3$.
+
+\medskip
+
+\noindent\textbf{What is proved, and from what.} The document is
+self-contained relative to \hyperref[app:background]{Appendix~C}, which asks
+only for finite sets, induction, and elementary reasoning about functions and
+products. In particular the following are proved rather than assumed:
+\begin{itemize}\tightlist
+\item that term operations preserve subuniverses, and the description of a
+      generated subuniverse as the set of values of terms on a fixed list of
+      generators (Section~\ref{sec:algebras});
+\item the relational description of absorption --- $B$ absorbs $\bA$ with
+      respect to an $m$-ary term precisely when no $m$-ary $B$-essential
+      relation exists (Theorem~\ref{thm:relational-absorption}) --- which is the
+      bridge between ``absorbs at some arity'' and ``absorbs at arity $3$'';
+\item Zhuk's two theorems on left centers, the definition and basic theory of
+      central absorption, the doubling trick, and the ternary conclusion
+      (Section~\ref{sec:centers}).
+\end{itemize}
+
+\noindent\textbf{Route.} Part~I fixes the universal-algebraic vocabulary and
+proves the handful of closure facts used everywhere: subuniverses are closed
+under term operations, generated subuniverses are term images of a fixed
+generator list, homomorphisms commute with generation, and the two relational
+constructions (intersection with a box, and projection) preserve
+subuniverses. It ends with absorption, binary absorption, and the lemma
+--- Lemma~\ref{lem:taylor-binary} --- that converts a \emph{one-sided} closure
+condition into binary absorption using a single Taylor identity.
+
+Part~II develops essential relations. An $m$-ary $B$-essential relation is a
+relation that meets every box with one coordinate free and all others confined
+to $B$, but misses the all-$B$ box; it is exactly the obstruction to $m$-ary
+absorption. The easy direction (absorption forbids essential relations) is a
+one-line application of the witnessing term to the witnessing tuples. The hard
+direction runs the free algebra $\Clo_m(\bA)$ against a grouped form of the
+definition, and needs the regrouping Lemma~\ref{lem:essential-groups}.
+
+Part~III is Section~3.10 of~\cite{BradyNotes}. Theorem~\ref{thm:center-step} is
+the enlargement step, Theorem~\ref{thm:center-absorbs} its iteration,
+Theorem~\ref{thm:center-central} the extra ``central'' property of the left
+center, Lemma~\ref{lem:doubling} the doubling trick, and
+Corollary~\ref{cor:central-ternary} the collapse to arity $3$.
+
+\medskip
+
+\noindent\textbf{Divergences from the source.} Three points where this document
+is deliberately more explicit than~\cite{BradyNotes}. First, the empty set is a
+subuniverse of every algebra in a signature without nullary symbols, and it
+absorbs vacuously; the hypothesis ``$\bB$ has no proper binary absorbing
+subalgebra'' must therefore be read as excluding only \emph{nonempty} proper
+ones, which is what Convention~\ref{conv:subalgebra} records. Second,
+Theorem~\ref{thm:center-central} is stated with the three generator blocks
+$\{a\}\times C$, $C\times C$, $C\times\{a\}$; the middle block is genuinely
+present in the source and is dropped only when passing to the weaker
+Definition~\ref{def:central-absorption}. Third, the arities produced by
+iterating the doubling trick from arity $3$ are $2+2^{k}$, and the argument in
+Corollary~\ref{cor:central-ternary} is arranged here to need only that the
+arity strictly increases.
+
+\part{Algebras, terms, and absorption}
+\label{part:algebras}
+
+\section{Signatures, algebras, and subuniverses}\label{sec:algebras}
+
+\begin{definition}[Signature and algebra]\label{def:algebra}
+A \emph{signature} $\sigma$ is a set of operation symbols together with an
+arity function $\mathrm{ar}:\sigma\to\{1,2,3,\dots\}$. Nullary symbols are not
+permitted. A $\sigma$-\emph{algebra} $\bA$ consists of a set $A$, its
+\emph{universe}, together with an operation
+$f^{\bA}:A^{\mathrm{ar}(f)}\to A$ for each $f\in\sigma$. The algebra is
+\emph{finite} if $A$ is finite. We write $\bA$ for the algebra and $A$ for its
+universe, and never identify the two.
+
+All algebras occurring below are $\sigma$-algebras for one fixed signature
+$\sigma$, and all have nonempty universe.
+\end{definition}
+
+\begin{definition}[Idempotence]\label{def:idempotent}
+$\bA$ is \emph{idempotent} if $f^{\bA}(a,a,\dots,a)=a$ for every $f\in\sigma$
+and every $a\in A$.
+\end{definition}
+
+\begin{definition}[Subuniverse]\label{def:subuniverse}
+A set $S\subseteq A$ is a \emph{subuniverse} of $\bA$, written $S\le\bA$, if
+$f^{\bA}(s_1,\dots,s_{\mathrm{ar}(f)})\in S$ for every $f\in\sigma$ and all
+$s_i\in S$. A subuniverse is \emph{proper} if it is not equal to $A$.
+\end{definition}
+
+Because $\sigma$ has no nullary symbols, $\varnothing\le\bA$ always. This is
+convenient in Part~II, where projections of relations may be empty, but it makes
+the phrase ``proper absorbing subalgebra'' ambiguous unless nonemptiness is
+legislated. We legislate it once:
+
+\begin{convention}[Subalgebra means nonempty]\label{conv:subalgebra}
+A \emph{subalgebra} of $\bA$ is a nonempty subuniverse of $\bA$. Whenever a
+hypothesis or conclusion says that an algebra \emph{has} or \emph{has no} proper
+subalgebra with some property, ``subalgebra'' carries its nonemptiness. Objects
+introduced as ``subuniverses'' may be empty unless stated otherwise.
+\end{convention}
+
+\begin{lemma}[Intersections and generation]\label{lem:generation}
+Let $\bA$ be an algebra.
+\begin{enumerate}\alphlabels\tightlist
+\item The intersection of any nonempty family of subuniverses of $\bA$ is a
+      subuniverse of $\bA$.
+\item For $S\subseteq A$ there is a least subuniverse of $\bA$ containing $S$,
+      namely the intersection of all subuniverses containing $S$. We write it
+      $\Sg_{\bA}(S)$.
+\item $S\subseteq T\le\bA$ implies $\Sg_{\bA}(S)\subseteq T$; and
+      $S\subseteq S'$ implies $\Sg_{\bA}(S)\subseteq\Sg_{\bA}(S')$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+For (a), if $s_1,\dots,s_n$ lie in every member of the family then so does
+$f^{\bA}(s_1,\dots,s_n)$. For (b), the family of subuniverses containing $S$ is
+nonempty because $A\le\bA$, so (a) applies; the intersection contains $S$ and is
+contained in every subuniverse containing $S$. Part (c) is immediate from the
+description in (b).
+\end{proof}
+
+\begin{lemma}[Singletons]\label{lem:singleton}
+If $\bA$ is idempotent then $\{a\}\le\bA$ for every $a\in A$.
+\end{lemma}
+\begin{proof}
+$f^{\bA}(a,\dots,a)=a$ by Definition~\ref{def:idempotent}.
+\end{proof}
+
+\begin{definition}[Products]\label{def:product}
+Given algebras $\bA_1,\dots,\bA_m$, the product algebra
+$\bA_1\times\cdots\times\bA_m$ has universe $A_1\times\cdots\times A_m$ and
+operations applied coordinatewise. A \emph{relation} between
+$\bA_1,\dots,\bA_m$ is a subuniverse $R\le\bA_1\times\cdots\times\bA_m$; its
+\emph{arity} is $m$. We write $\bA^m$ for the $m$-fold product of $\bA$ with
+itself, and $\bA^{X}$ for the product of copies of $\bA$ indexed by a set $X$,
+whose universe is the set of functions $X\to A$.
+\end{definition}
+
+\begin{definition}[Terms]\label{def:term}
+For $n\ge1$ let $\Tm(n)$ be the set of $n$-ary \emph{terms}, defined
+inductively: the variables $x_1,\dots,x_n$ are $n$-ary terms, and if $f\in\sigma$
+has arity $k$ and $t_1,\dots,t_k\in\Tm(n)$ then $f(t_1,\dots,t_k)\in\Tm(n)$.
+For an algebra $\bA$, the \emph{term operation} $t^{\bA}:A^n\to A$ is defined by
+$x_i^{\bA}(a_1,\dots,a_n)=a_i$ and
+$f(t_1,\dots,t_k)^{\bA}(\vec a)=f^{\bA}\bigl(t_1^{\bA}(\vec a),\dots,t_k^{\bA}(\vec a)\bigr)$.
+We write $\Clo_n(\bA)=\{t^{\bA}:t\in\Tm(n)\}\subseteq A^{A^n}$.
+
+If $\pi:[n']\to[n]$ is any map and $t\in\Tm(n)$, the term
+$t[\pi]\in\Tm(n')$ is obtained by replacing each variable $x_i$ by
+$x_{\pi^{-1}}$; precisely, $t[\pi]$ is defined by structural recursion,
+$x_i[\pi]=x_{j}$ for any chosen $j$ with $\pi(j)=i$. We use only the special
+case where $\pi$ is a bijection, so that the choice is forced:
+\emph{variable renaming along a permutation}. Then
+$t[\pi]^{\bA}(a_1,\dots,a_n)=t^{\bA}(a_{\pi(1)},\dots,a_{\pi(n)})$.
+\end{definition}
+
+\begin{lemma}[Term operations are idempotent]\label{lem:term-idempotent}
+If $\bA$ is idempotent then $t^{\bA}(a,a,\dots,a)=a$ for every $t\in\Tm(n)$ and
+every $a\in A$.
+\end{lemma}
+\begin{proof}
+Induction on $t$. For a variable the value is $a$. For $f(t_1,\dots,t_k)$ the
+value is $f^{\bA}(a,\dots,a)=a$ by the inductive hypothesis and
+Definition~\ref{def:idempotent}.
+\end{proof}
+
+\begin{lemma}[Preservation]\label{lem:preservation}
+Let $S\le\bA$ and $t\in\Tm(n)$. Then $t^{\bA}(s_1,\dots,s_n)\in S$ for all
+$s_i\in S$.
+\end{lemma}
+\begin{proof}
+Induction on $t$. A variable returns one of the $s_i$. For $f(t_1,\dots,t_k)$,
+each $t_j^{\bA}(\vec s)\in S$ by the inductive hypothesis, and $S$ is closed
+under $f^{\bA}$ by Definition~\ref{def:subuniverse}.
+\end{proof}
+
+Applied to a product algebra, Lemma~\ref{lem:preservation} is the statement that
+relations are \emph{preserved} by term operations, in the form used constantly
+below: if $R\le\bA_1\times\cdots\times\bA_m$ and
+$(a_{1j},\dots,a_{mj})\in R$ for $j=1,\dots,n$, then
+\[
+ \bigl(t^{\bA_1}(a_{11},\dots,a_{1n}),\;\dots,\;t^{\bA_m}(a_{m1},\dots,a_{mn})\bigr)\in R .
+\]
+
+\begin{lemma}[Generation by a fixed list]\label{lem:sg-terms}
+Let $\bA$ be an algebra and let $S=\{s_1,\dots,s_N\}\subseteq A$ with $N\ge1$.
+Then
+\[
+ \Sg_{\bA}(S)=\{\,t^{\bA}(s_1,\dots,s_N)\;:\;t\in\Tm(N)\,\}.
+\]
+\end{lemma}
+\begin{proof}
+Write $E$ for the right-hand side. Every element of $E$ lies in $\Sg_{\bA}(S)$
+by Lemma~\ref{lem:preservation}, since $S\subseteq\Sg_{\bA}(S)\le\bA$.
+Conversely $E$ contains each $s_i$, taking $t=x_i$; and $E\le\bA$, because for
+$f\in\sigma$ of arity $k$ and $t_1,\dots,t_k\in\Tm(N)$,
+\[
+  f^{\bA}\bigl(t_1^{\bA}(\vec s),\dots,t_k^{\bA}(\vec s)\bigr)
+  = \bigl(f(t_1,\dots,t_k)\bigr)^{\bA}(\vec s)\in E .
+\]
+Hence $\Sg_{\bA}(S)\subseteq E$ by Lemma~\ref{lem:generation}(c).
+\end{proof}
+
+\begin{remark}[Why a fixed list]\label{rem:fixed-list}
+The usual formulation --- every element of $\Sg_{\bA}(S)$ is $t^{\bA}$ applied
+to \emph{some} finite tuple of generators --- requires combining terms over
+different generator lists, and hence a substitution operation on terms. Fixing
+the list once, which is possible because all generating sets used below are
+finite, avoids substitution entirely: only variable renaming along a permutation
+is ever needed, and only in Theorem~\ref{thm:center-central}.
+\end{remark}
+
+\begin{definition}[Homomorphism]\label{def:hom}
+A map $h:A\to B$ is a \emph{homomorphism} $\bA\to\bB$ if
+$h(f^{\bA}(a_1,\dots,a_k))=f^{\bB}(h(a_1),\dots,h(a_k))$ for all $f\in\sigma$
+and $a_i\in A$. Each coordinate projection
+$\pi_i:\bA_1\times\cdots\times\bA_m\to\bA_i$, and more generally each
+projection $\pi_J$ onto a subfamily of coordinates, is a homomorphism.
+\end{definition}
+
+\begin{lemma}[Images and generation]\label{lem:hom-image}
+Let $h:\bA\to\bB$ be a homomorphism.
+\begin{enumerate}\alphlabels\tightlist
+\item If $S\le\bA$ then $h(S)\le\bB$.
+\item $h(t^{\bA}(a_1,\dots,a_n))=t^{\bB}(h(a_1),\dots,h(a_n))$ for every
+      $t\in\Tm(n)$.
+\item $h(\Sg_{\bA}(S))=\Sg_{\bB}(h(S))$ for every finite nonempty
+      $S\subseteq A$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) An element of $h(S)$ has the form $h(s)$; apply the homomorphism identity
+and closure of $S$. (b) Induction on $t$, using the homomorphism identity at
+each operation symbol. (c) Enumerate $S=\{s_1,\dots,s_N\}$; by
+Lemma~\ref{lem:sg-terms} both sides equal
+$\{t^{\bB}(h(s_1),\dots,h(s_N)):t\in\Tm(N)\}$, the left-hand side by (b).
+\end{proof}
+
+\begin{lemma}[Relational constructions]\label{lem:pp}
+Let $\bA_1,\dots,\bA_m$ be algebras.
+\begin{enumerate}\alphlabels\tightlist
+\item If $R,R'\le\bA_1\times\cdots\times\bA_m$ then
+      $R\cap R'\le\bA_1\times\cdots\times\bA_m$.
+\item If $R\le\bA_1\times\cdots\times\bA_m$ and $S_i\le\bA_i$ for each $i$,
+      then $R\cap(S_1\times\cdots\times S_m)\le\bA_1\times\cdots\times\bA_m$.
+\item If $R\le\bA_1\times\cdots\times\bA_m$ and $J\subseteq[m]$ then
+      $\pi_J(R)\le\prod_{i\in J}\bA_i$.
+\item If $h:\bA\to\bB$ is a homomorphism and $S\le\bB$, then
+      $h^{-1}(S)\le\bA$. In particular, for $J\subseteq[m]$ and
+      $S\le\prod_{i\in J}\bA_i$, the cylinder $\pi_J^{-1}(S)$ is a subuniverse
+      of $\bA_1\times\cdots\times\bA_m$.
+\item If $\rho:[m']\to[m]$ is a bijection, the induced map
+      $\vec a\mapsto(a_{\rho(1)},\dots,a_{\rho(m')})$ is an isomorphism
+      $\bA_1\times\cdots\times\bA_m\to\bA_{\rho(1)}\times\cdots\times\bA_{\rho(m')}$,
+      and carries subuniverses to subuniverses.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) is Lemma~\ref{lem:generation}(a). (b) The box $S_1\times\cdots\times S_m$ is
+a subuniverse because operations act coordinatewise, so (a) applies. (c) is
+Lemma~\ref{lem:hom-image}(a) applied to the projection homomorphism. (d) If
+$h(a_r)\in S$ for $r\in[k]$ then
+$h(f^{\bA}(a_1,\dots,a_k))=f^{\bB}(h(a_1),\dots,h(a_k))\in S$. (e) The map is a
+bijection commuting with coordinatewise operations, so
+Lemma~\ref{lem:hom-image}(a) applies.
+\end{proof}
+
+\begin{remark}[The only relational constructions used]\label{rem:pp-usage}
+Parts (a)--(e) of Lemma~\ref{lem:pp} are all that is needed to see that the
+relations built in this document are subuniverses. They are used in exactly
+three places: the neighborhoods $a+R$ of Definition~\ref{def:neighborhood}, the
+grouped projections of Section~\ref{sec:essential}, and the doubled relation
+$R'$ of Lemma~\ref{lem:doubling}. No general theory of primitive positive
+definability is required.
+\end{remark}
+
+\section{Absorption}\label{sec:absorption}
+
+\begin{definition}[Absorption]\label{def:absorption}
+Let $\bA$ be an algebra and let $E\subseteq D$ be subuniverses of $\bA$. For
+$t\in\Tm(m)$ we say that $t$ \emph{witnesses} $E\ab D$ if for every $i\in[m]$,
+\[
+ t^{\bA}(z_1,\dots,z_m)\in E
+ \qquad\text{whenever } z_i\in D \text{ and } z_j\in E \text{ for all }j\ne i .
+\]
+We write $E\ab D$, and say $E$ \emph{absorbs} $D$, if some $t\in\Tm(m)$
+witnesses it for some $m\ge1$; and $E\abin D$, and say $E$ \emph{binary
+absorbs} $D$, if some $t\in\Tm(2)$ witnesses it, i.e.\ if
+$t^{\bA}(E\times D)\cup t^{\bA}(D\times E)\subseteq E$. When $D=A$ we also
+write $E\ab\bA$ and $E\abin\bA$.
+
+The ambient algebra is suppressed in the notation. This is harmless: the
+condition mentions $t^{\bA}$ only at arguments lying in $D$, so it depends on
+$\bA$ only through the operations of $\bA$ restricted to $D$. No separate
+notion of ``the subalgebra on $D$'' is needed.
+\end{definition}
+
+\begin{remark}[The quantifier form matters]\label{rem:absorption-quantifier}
+Definition~\ref{def:absorption} constrains the tuple $(z_1,\dots,z_m)$ rather
+than quantifying over a separate list $e_1,\dots,e_m\in E$ of which one entry is
+then overwritten. The two readings differ exactly when $E=\varnothing$: the
+second is vacuous for every $m\ge1$, while the first is vacuous only for
+$m\ge2$ and \emph{fails} for $m=1$, where it asserts
+$t^{\bA}(z_1)\in\varnothing$ for all $z_1\in D$. The first reading is the
+correct one, in the sense that it is the one for which
+Theorem~\ref{thm:relational-absorption} is true: for $S=\varnothing$ and $m=1$
+the relation $R=A$ is $S$-essential of arity $1$, so the theorem must deny
+$1$-ary absorption.
+\end{remark}
+
+\begin{remark}[Empty and full]\label{rem:absorption-degenerate}
+$A\ab\bA$ holds, witnessed by $x_1$, and $\varnothing\ab\bA$ holds, witnessed
+by any term of arity at least $2$. Convention~\ref{conv:subalgebra} is what
+keeps the empty subuniverse from trivializing the hypothesis ``$\bB$ has no
+proper binary absorbing subalgebra''.
+\end{remark}
+
+\begin{definition}[Taylor identities]\label{def:taylor}
+Let $\bA$ be an algebra, $D\subseteq A$, $t\in\Tm(k)$ and $i\in[k]$. A
+\emph{Taylor identity for $t$ at $i$ over $D$} is a pair of maps
+$u,v:[k]\to\{1,2\}$ with $u(i)=1$ and $v(i)=2$ such that
+\[
+ t^{\bA}\bigl(w_{u(1)},\dots,w_{u(k)}\bigr)
+ =t^{\bA}\bigl(w_{v(1)},\dots,w_{v(k)}\bigr)
+ \qquad\text{for all }x,y\in D,
+\]
+where $w_1=x$ and $w_2=y$. We say $t$ is \emph{Taylor on $D$} if a Taylor
+identity for $t$ at $i$ over $D$ exists for every $i\in[k]$.
+\end{definition}
+
+\begin{remark}[Relation to the usual definition]\label{rem:taylor-usual}
+An algebra is usually called \emph{Taylor} if it has an idempotent term
+satisfying, for each coordinate, an identity in two variables whose two sides
+carry $x$ and $y$ respectively in that coordinate and arbitrary members of
+$\{x,y\}$ elsewhere. Definition~\ref{def:taylor} is that condition, relativized
+to a subset $D$ and stated for a term of the ambient signature; this is the
+form in which it is used, since in Theorem~\ref{thm:center-step} the term is
+applied to elements of $A$ while its identities are needed only on $B$.
+\end{remark}
+
+The next lemma is the engine that converts a one-sided closure condition into
+two-sided binary absorption. It is the only place a Taylor identity is used.
+
+\begin{lemma}[One-sided closure gives binary absorption]\label{lem:taylor-binary}
+Let $\bA$ be an algebra, let $E\subseteq D\subseteq A$ with $D\le\bA$ and
+$E\le\bA$, let $t\in\Tm(k)$ and $i\in[k]$, and suppose:
+\begin{enumerate}\alphlabels\tightlist
+\item there is a Taylor identity $(u,v)$ for $t$ at $i$ over $D$, and
+\item $t^{\bA}(z_1,\dots,z_k)\in E$ whenever $z_i\in E$ and $z_j\in D$ for all
+      $j\ne i$.
+\end{enumerate}
+Then $E\abin D$ in the sense of Definition~\ref{def:absorption}; explicitly, the
+binary term $f:=t\bigl(x_{u(1)},\dots,x_{u(k)}\bigr)\in\Tm(2)$ satisfies
+$f^{\bA}(E\times D)\cup f^{\bA}(D\times E)\subseteq E$.
+\end{lemma}
+\begin{proof}
+Let $x,y\in D$ and put $w_1=x$, $w_2=y$. By construction
+$f^{\bA}(x,y)=t^{\bA}(w_{u(1)},\dots,w_{u(k)})$, and by (a) this also equals
+$t^{\bA}(w_{v(1)},\dots,w_{v(k)})$.
+
+Take $e\in E$ and $d\in D$. For $f^{\bA}(e,d)$ set $x=e$, $y=d$ and use the
+$u$-form: its $i$th argument is $w_{u(i)}=w_1=e\in E$, and every argument is one
+of $e,d$, hence lies in $D$ since $E\subseteq D$. By (b),
+$f^{\bA}(e,d)\in E$. For $f^{\bA}(d,e)$ set $x=d$, $y=e$ and use the $v$-form:
+its $i$th argument is $w_{v(i)}=w_2=e\in E$, and again every argument lies in
+$D$. By (b), $f^{\bA}(d,e)\in E$.
+\end{proof}
+
+\begin{definition}[Star powers]\label{def:star}
+Let $t\in\Tm(k)$ with $k\ge1$. Define $t^{*0}:=x_1\in\Tm(1)$ and, for
+$\ell\ge0$,
+\[
+ t^{*(\ell+1)}:=t\Bigl(
+   t^{*\ell}\bigl(x_1,\dots,x_{k^{\ell}}\bigr),\;
+   t^{*\ell}\bigl(x_{k^{\ell}+1},\dots,x_{2k^{\ell}}\bigr),\;\dots,\;
+   t^{*\ell}\bigl(x_{(k-1)k^{\ell}+1},\dots,x_{k^{\ell+1}}\bigr)\Bigr)
+ \;\in\;\Tm\bigl(k^{\ell+1}\bigr).
+\]
+Writing $p\in[k^{\ell+1}]$ uniquely as $p=(j-1)k^{\ell}+q$ with $j\in[k]$ and
+$q\in[k^{\ell}]$, we call $j$ the \emph{block} of $p$ and $q$ its
+\emph{position in the block}, so that
+\[
+ \bigl(t^{*(\ell+1)}\bigr)^{\bA}(a_1,\dots,a_{k^{\ell+1}})
+ = t^{\bA}\bigl(d_1,\dots,d_k\bigr),\qquad
+ d_j=\bigl(t^{*\ell}\bigr)^{\bA}\bigl(a_{(j-1)k^{\ell}+1},\dots,a_{jk^{\ell}}\bigr).
+\]
+\end{definition}
+
+\part{Essential relations and the arity of absorption}
+\label{part:essential}
+
+\section{Essential relations}\label{sec:essential}
+
+\begin{definition}[Essential relation]\label{def:essential}
+Let $\bA_1,\dots,\bA_m$ be algebras with $m\ge1$ and let $S_i\le\bA_i$. A
+relation $R\le\bA_1\times\cdots\times\bA_m$ is
+$(S_1,\dots,S_m)$-\emph{essential} if
+\begin{align}
+ &R\cap(S_1\times\cdots\times S_{i-1}\times A_i\times S_{i+1}\times\cdots\times S_m)\ne\varnothing
+ \quad\text{for every }i\in[m],\label{eq:E1}\\
+ &R\cap(S_1\times\cdots\times S_m)=\varnothing.\label{eq:E2}
+\end{align}
+When all $\bA_i$ equal $\bA$ and all $S_i$ equal $S$, we say $R$ is
+$S$-\emph{essential of arity} $m$.
+\end{definition}
+
+\begin{lemma}[Essentiality forces nonemptiness]\label{lem:essential-nonempty}
+If $R\le\bA_1\times\cdots\times\bA_m$ is $(S_1,\dots,S_m)$-essential and
+$m\ge2$, then $S_i\ne\varnothing$ for every $i\in[m]$.
+\end{lemma}
+\begin{proof}
+Fix $i$ and choose $i'\ne i$ in $[m]$. The witness supplied by
+\eqref{eq:E1} for the index $i'$ is a tuple whose $i$th coordinate lies in
+$S_i$.
+\end{proof}
+
+\begin{proposition}[Passing to smaller arity]\label{prop:essential-down}
+Let $R\le\bA_1\times\cdots\times\bA_m$ be $(S_1,\dots,S_m)$-essential with
+$m\ge2$. Then
+\[
+ R^{-}:=\pi_{[m-1]}\bigl(R\cap(A_1\times\cdots\times A_{m-1}\times S_m)\bigr)
+\]
+is an $(S_1,\dots,S_{m-1})$-essential relation
+$R^{-}\le\bA_1\times\cdots\times\bA_{m-1}$. Consequently, if an
+$S$-essential relation of arity $m$ exists, then $S$-essential relations of
+every arity $m'$ with $1\le m'\le m$ exist.
+\end{proposition}
+\begin{proof}
+$R^{-}$ is a subuniverse by Lemma~\ref{lem:pp}(b),(c).
+
+\eqref{eq:E1}: fix $i\le m-1$ and let $\vec x$ be the witness for index $i$
+supplied by \eqref{eq:E1} for $R$. Its last coordinate lies in $S_m$, so
+$\vec x\in R\cap(A_1\times\cdots\times A_{m-1}\times S_m)$, and
+$\pi_{[m-1]}(\vec x)$ lies in the required box.
+
+\eqref{eq:E2}: suppose $\vec y\in R^{-}\cap(S_1\times\cdots\times S_{m-1})$.
+Then $\vec y=\pi_{[m-1]}(\vec x)$ for some $\vec x\in R$ with $x_m\in S_m$,
+whence $\vec x\in R\cap(S_1\times\cdots\times S_m)$, contradicting
+\eqref{eq:E2} for $R$.
+
+The final sentence follows by iterating, each step reducing the arity by one.
+\end{proof}
+
+\begin{proposition}[Absorption forbids essential relations]\label{prop:absorption-blocks}
+Let $S\le\bA$ and suppose $t\in\Tm(m)$ witnesses $S\ab\bA$. Then there is no
+$S$-essential relation of arity $m$.
+\end{proposition}
+\begin{proof}
+Suppose $R\le\bA^m$ is $S$-essential. For each $i\in[m]$ let $\vec r^{\,(i)}\in R$
+be the witness supplied by \eqref{eq:E1}, so $r^{(i)}_i\in A$ and
+$r^{(i)}_j\in S$ for $j\ne i$. Apply $t^{\bA^m}$ to the $m$ tuples
+$\vec r^{\,(1)},\dots,\vec r^{\,(m)}$; by Lemma~\ref{lem:preservation} the result
+$\vec z$ lies in $R$, and its $j$th coordinate is
+\[
+  z_j=t^{\bA}\bigl(r^{(1)}_j,\dots,r^{(m)}_j\bigr)
+     =t^{\bA}\bigl(\underbrace{r^{(1)}_j}_{\in S},\dots,
+        \underbrace{r^{(j)}_j}_{\in A},\dots,\underbrace{r^{(m)}_j}_{\in S}\bigr)\in S
+\]
+by Definition~\ref{def:absorption}, the free argument sitting in position $j$.
+Hence $\vec z\in R\cap S^m$, contradicting \eqref{eq:E2}.
+\end{proof}
+
+\begin{corollary}[Absorption bounds essential arity]\label{cor:absorption-bound}
+If $S\ab\bA$ is witnessed by a term of arity $m$, then every $S$-essential
+relation has arity at most $m-1$. In particular the set of arities of
+$S$-essential relations is bounded.
+\end{corollary}
+\begin{proof}
+An $S$-essential relation of arity $m'\ge m$ would yield one of arity exactly
+$m$ by Proposition~\ref{prop:essential-down}, contradicting
+Proposition~\ref{prop:absorption-blocks}.
+\end{proof}
+
+The converse of Proposition~\ref{prop:absorption-blocks} is the substantial
+result of this part. It goes through a grouped form of essentiality.
+
+\begin{lemma}[Regrouping]\label{lem:essential-groups}
+Let $S\le\bA$, let $m\ge1$ and $n_1,\dots,n_m\ge1$, and regard
+\[
+ R\;\le\;\bA^{n_1}\times\cdots\times\bA^{n_m}
+\]
+as a relation of arity $n=n_1+\cdots+n_m$ whose coordinates are partitioned into
+$m$ consecutive blocks of sizes $n_1,\dots,n_m$. If $R$ is
+$(S^{n_1},\dots,S^{n_m})$-essential --- that is, essential for the block
+partition, with $S^{n_j}$ the box on block $j$ --- then there exists an
+$S$-essential relation of arity $m$.
+\end{lemma}
+\begin{proof}
+By strong induction on $n$, with $m$ fixed.
+
+If $n_1=\cdots=n_m=1$ then $n=m$ and $R$ is itself an $S$-essential relation of
+arity $m$.
+
+Otherwise some $n_j>1$. Permuting the blocks permutes the coordinates by a
+block permutation, which by Lemma~\ref{lem:pp}(e) carries $R$ to a subuniverse
+of the correspondingly permuted product, and permutes the two essentiality
+conditions among themselves; so we may assume $n_m>1$. Write
+$n_{<m}=n_1+\cdots+n_{m-1}$, so $n=n_{<m}+n_m$ and the coordinates of the last
+block are $n_{<m}+1,\dots,n$.
+
+Consider
+\[
+ R_1:=\pi_{[n-1]}\bigl(R\cap(A^{n-1}\times S)\bigr)
+ \;\le\;\bA^{n_1}\times\cdots\times\bA^{n_{m-1}}\times\bA^{n_m-1},
+\]
+a relation of arity $n-1$ with block sizes $n_1,\dots,n_{m-1},n_m-1$, all
+$\ge1$. It is a subuniverse by Lemma~\ref{lem:pp}(b),(c). We check the two
+essentiality conditions for these blocks.
+
+\emph{Condition \eqref{eq:E2}.} If $\vec y\in R_1$ has all coordinates in $S$
+then $\vec y=\pi_{[n-1]}(\vec x)$ with $\vec x\in R$ and $x_n\in S$, so
+$\vec x\in R\cap S^n$, contradicting \eqref{eq:E2} for $R$.
+
+\emph{Condition \eqref{eq:E1} for blocks $j\le m-1$.} The witness $\vec x\in R$
+for block $j$ has all coordinates outside block $j$ in $S$; in particular
+$x_n\in S$, so $\vec x\in R\cap(A^{n-1}\times S)$, and $\pi_{[n-1]}(\vec x)$ is
+a witness for block $j$ in $R_1$.
+
+\emph{Condition \eqref{eq:E1} for the last block.} This asks for
+$\vec x\in R$ with $x_1,\dots,x_{n_{<m}}\in S$ and $x_n\in S$, the remaining
+coordinates $x_{n_{<m}+1},\dots,x_{n-1}$ unconstrained; equivalently, it asks
+that
+\[
+ \pi_{[n_{<m}]\cup\{n\}}(R)\cap S^{\,n_{<m}+1}\ne\varnothing. \tag{$\dagger$}
+\]
+
+If $(\dagger)$ holds then $R_1$ is essential for its block partition, of arity
+$n-1<n$, and the inductive hypothesis applies.
+
+If $(\dagger)$ fails, put
+\[
+ R_2:=\pi_{[n_{<m}]\cup\{n\}}(R)\;\le\;\bA^{n_1}\times\cdots\times\bA^{n_{m-1}}\times\bA,
+\]
+a relation of arity $n_{<m}+1$ with block sizes $n_1,\dots,n_{m-1},1$, all
+$\ge1$; it is a subuniverse by Lemma~\ref{lem:pp}(c). Condition \eqref{eq:E2}
+for $R_2$ is precisely the failure of $(\dagger)$. For \eqref{eq:E1} with
+$j\le m-1$, project the witness of $R$ for block $j$: its coordinates outside
+block $j$ lie in $S$, in particular $x_n\in S$. For \eqref{eq:E1} on the last
+block, project the witness of $R$ for block $m$: its first $n_{<m}$ coordinates
+lie in $S$, and its $n$th coordinate is unconstrained. Since $n_m>1$ we have
+$n_{<m}+1<n$, so the inductive hypothesis applies to $R_2$.
+\end{proof}
+
+\begin{lemma}[The free algebra on $m$ generators]\label{lem:clo-subuniverse}
+For every $m\ge1$, $\Clo_m(\bA)$ is a subuniverse of $\bA^{A^m}$ containing the
+$m$ coordinate projections $p_1,\dots,p_m:A^m\to A$.
+\end{lemma}
+\begin{proof}
+$p_i=x_i^{\bA}\in\Clo_m(\bA)$. For $f\in\sigma$ of arity $k$ and
+$t_1,\dots,t_k\in\Tm(m)$, the pointwise application
+$f^{\bA^{A^m}}(t_1^{\bA},\dots,t_k^{\bA})$ sends $\vec a\mapsto
+f^{\bA}(t_1^{\bA}(\vec a),\dots,t_k^{\bA}(\vec a))
+=\bigl(f(t_1,\dots,t_k)\bigr)^{\bA}(\vec a)$, so it lies in $\Clo_m(\bA)$.
+\end{proof}
+
+\begin{theorem}[Relational description of absorption]\label{thm:relational-absorption}
+Let $\bA$ be a finite algebra, $S\le\bA$, and $m\ge1$. Then $S\ab\bA$ is
+witnessed by some term of arity $m$ if and only if there is no $S$-essential
+relation of arity $m$.
+\end{theorem}
+\begin{proof}
+The forward implication is Proposition~\ref{prop:absorption-blocks}.
+
+For the converse, assume there is no $S$-essential relation of arity $m$.
+
+If $S=A$, every $t\in\Tm(m)$ witnesses $S\ab\bA$, since all its values lie in
+$A=S$; and $x_1\in\Tm(m)$, so such a $t$ exists.
+
+If $S=\varnothing$ and $m\ge2$, the witnessing condition of
+Definition~\ref{def:absorption} is vacuous, because it requires $z_j\in S$ for
+the $m-1\ge1$ indices $j\ne i$. If $S=\varnothing$ and $m=1$, the hypothesis is
+unsatisfiable: $R=A$ is an $S$-essential relation of arity $1$, being nonempty
+and disjoint from $S$. So in either case there is nothing to prove.
+
+Assume from now on that $\varnothing\ne S\subsetneq A$.
+
+For $i\in[m]$ set
+\[
+ X_i:=\{\vec x\in A^m\;:\;x_i\in A\setminus S\text{ and }x_j\in S\text{ for }j\ne i\}.
+\]
+Each $X_i$ is nonempty, since $S$ and $A\setminus S$ are nonempty. The $X_i$ are
+pairwise disjoint, because a tuple in $X_i\cap X_{i'}$ with $i\ne i'$ would have
+$x_i\in S$ and $x_i\notin S$. Put $X:=X_1\cup\cdots\cup X_m$ and
+\[
+ R:=\pi_{X}\bigl(\Clo_m(\bA)\bigr)\;\le\;\bA^{X_1}\times\cdots\times\bA^{X_m},
+\]
+using Lemma~\ref{lem:clo-subuniverse} and Lemma~\ref{lem:pp}(c). Concretely, $R$
+is the set of restrictions $t^{\bA}\!\restriction_X$ for $t\in\Tm(m)$, and we
+regard it as a relation of arity $|X|$ with the $m$ blocks $X_1,\dots,X_m$, of
+sizes $n_i=|X_i|\ge1$.
+
+\emph{Condition \eqref{eq:E1}.} Fix $i\in[m]$ and take $t=x_i$, so
+$t^{\bA}=p_i$. For $\vec x\in X_j$ with $j\ne i$ we have $x_i\in S$ by the
+definition of $X_j$, so $p_i(\vec x)\in S$. Hence
+$\pi_X(p_i)$ lies in $S^{X_1}\times\cdots\times A^{X_i}\times\cdots\times S^{X_m}$,
+witnessing \eqref{eq:E1} for block $i$.
+
+Since no $S$-essential relation of arity $m$ exists, Lemma~\ref{lem:essential-groups}
+shows that $R$ is not $(S^{X_1},\dots,S^{X_m})$-essential. Condition
+\eqref{eq:E1} holds, so \eqref{eq:E2} must fail:
+\[
+ R\cap\bigl(S^{X_1}\times\cdots\times S^{X_m}\bigr)\ne\varnothing .
+\]
+Choose $t\in\Tm(m)$ whose restriction to $X$ witnesses this, so
+$t^{\bA}(\vec x)\in S$ for every $\vec x\in X$.
+
+Finally, $t$ witnesses $S\ab\bA$. Let $i\in[m]$, $a\in A$, $s_1,\dots,s_m\in S$
+and put $\vec x=(s_1,\dots,s_{i-1},a,s_{i+1},\dots,s_m)$. If $a\notin S$ then
+$\vec x\in X_i$ and $t^{\bA}(\vec x)\in S$ as just shown. If $a\in S$ then
+$\vec x\in S^m$ and $t^{\bA}(\vec x)\in S$ by Lemma~\ref{lem:preservation}.
+\end{proof}
+
+\begin{corollary}[Unbounded arity defeats absorption]\label{cor:unbounded-no-absorption}
+Let $\bA$ be a finite algebra and $S\le\bA$ with $S\ab\bA$. Then there is a
+largest arity of an $S$-essential relation, or no $S$-essential relation at all.
+\end{corollary}
+\begin{proof}
+Immediate from Corollary~\ref{cor:absorption-bound}: the arities form a set of
+positive integers bounded above, hence finite, hence with a largest element if
+nonempty.
+\end{proof}
+
+\part{Zhuk's centers}
+\label{part:centers}
+
+\section{Left centers and their neighborhoods}\label{sec:centers}
+
+Throughout this part $\bA$ and $\bB$ are finite idempotent algebras with
+nonempty universes, and $R\le\bA\times\bB$.
+
+\begin{definition}[Subdirect]\label{def:subdirect}
+$R\le\bA\times\bB$ is \emph{subdirect} if $\pi_1(R)=A$ and $\pi_2(R)=B$.
+\end{definition}
+
+\begin{definition}[Neighborhood and left center]\label{def:neighborhood}
+For $a\in A$ put
+\[
+ a+R:=\{b\in B\;:\;(a,b)\in R\}\;=\;\pi_2\bigl(R\cap(\{a\}\times B)\bigr),
+\]
+and define the \emph{left center} of $R$ to be
+\[
+ C:=\{a\in A\;:\;a+R=B\}=\{a\in A: \{a\}\times B\subseteq R\}.
+\]
+The \emph{right center} of $R$ is the left center of
+$R^{-}=\{(b,a):(a,b)\in R\}$, a subuniverse of $\bB\times\bA$.
+\end{definition}
+
+\begin{lemma}[Basic properties]\label{lem:center-basic}
+Let $R\le\bA\times\bB$ be subdirect with left center $C$.
+\begin{enumerate}\alphlabels\tightlist
+\item $a+R\le\bB$ for every $a\in A$, and $a+R\ne\varnothing$.
+\item $|a+R|\le|B|$, with equality if and only if $a\in C$.
+\item $C\le\bA$.
+\item For every $t\in\Tm(k)$ and $a_1,\dots,a_k\in A$,
+      \[
+        t^{\bA}(a_1,\dots,a_k)+R\;\supseteq\;
+        \bigl\{\,t^{\bB}(b_1,\dots,b_k)\;:\;b_j\in a_j+R\,\bigr\}.
+      \]
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) $\{a\}\le\bA$ by Lemma~\ref{lem:singleton}, so $a+R\le\bB$ by
+Lemma~\ref{lem:pp}(b),(c). It is nonempty because $\pi_1(R)=A$.
+
+(b) Immediate from $a+R\subseteq B$ and the definition of $C$.
+
+(c) Let $f\in\sigma$ have arity $k$, let $a_1,\dots,a_k\in C$ and let $b\in B$.
+Then $(a_j,b)\in R$ for every $j$, so
+$(f^{\bA}(a_1,\dots,a_k),f^{\bB}(b,\dots,b))\in R$; and
+$f^{\bB}(b,\dots,b)=b$ because $\bB$ is idempotent. As $b\in B$ was arbitrary,
+$f^{\bA}(a_1,\dots,a_k)\in C$.
+
+(d) If $b_j\in a_j+R$ then $(a_j,b_j)\in R$ for each $j$, so
+$(t^{\bA}(\vec a),t^{\bB}(\vec b))\in R$ by Lemma~\ref{lem:preservation}.
+\end{proof}
+
+\begin{remark}[Degenerate centers]\label{rem:degenerate-center}
+If $C=\varnothing$ then every assertion below about $C$ holds vacuously
+(Remark~\ref{rem:absorption-degenerate}); if $C=A$ then $R=A\times B$ and the
+assertions are trivial. The content is in the case
+$\varnothing\ne C\subsetneq A$, but no proof needs to exclude the degenerate
+cases, and none does.
+\end{remark}
+
+\section{The enlargement step}\label{sec:step}
+
+\begin{theorem}[One step towards the center]\label{thm:center-step}
+Let $\bA,\bB$ be finite idempotent algebras, let $R\le\bA\times\bB$ be
+subdirect with left center $C$, and let $t\in\Tm(k)$ be Taylor on $B$. Assume
+$\bB$ has no proper binary absorbing subalgebra. Then for every $a\in A$, every
+$i\in[k]$ and all $c_1,\dots,c_k\in C$,
+\[
+ \bigl|\,t^{\bA}(c_1,\dots,c_{i-1},a,c_{i+1},\dots,c_k)+R\,\bigr|
+ \;\ge\;\min\bigl(|B|,\;|a+R|+1\bigr).
+\]
+\end{theorem}
+\begin{proof}
+Write $a^{+}:=t^{\bA}(c_1,\dots,a,\dots,c_k)$ with $a$ in position $i$, and set
+\[
+ E:=\bigl\{\,t^{\bB}(z_1,\dots,z_k)\;:\;z_i\in a+R,\;z_j\in B\ (j\ne i)\,\bigr\}.
+\]
+
+\emph{Step 1: $a^{+}+R\supseteq E$.} Each $c_j\in C$ has $c_j+R=B$, so
+Lemma~\ref{lem:center-basic}(d) gives exactly this containment.
+
+\emph{Step 2: $E\supseteq a+R$.} For $b\in a+R$ take $z_1=\cdots=z_k=b$; this is
+admissible because $a+R\subseteq B$, and $t^{\bB}(b,\dots,b)=b$ by
+Lemma~\ref{lem:term-idempotent}.
+
+\emph{Step 3: the dichotomy.} If $E\ne a+R$ then $|E|\ge|a+R|+1$ by Step 2, and
+$|a^{+}+R|\ge|E|\ge|a+R|+1$ by Step 1, which is the claim.
+
+So suppose $E=a+R$. Then $t^{\bB}(z_1,\dots,z_k)\in a+R$ whenever
+$z_i\in a+R$ and $z_j\in B$ for $j\ne i$. Apply Lemma~\ref{lem:taylor-binary}
+inside $\bB$, with $D=B$, with $E_{\text{lem}}=a+R$ --- a subuniverse of $\bB$
+by Lemma~\ref{lem:center-basic}(a) --- and with the Taylor identity for $t$ at
+$i$ over $B$ supplied by Definition~\ref{def:taylor}. It yields
+$a+R\abin\bB$. Now $a+R$ is nonempty by Lemma~\ref{lem:center-basic}(a), so by
+the hypothesis on $\bB$ and Convention~\ref{conv:subalgebra} it is not a proper
+subuniverse: $a+R=B$. Hence $a\in C$, so $a^{+}\in C$ by
+Lemma~\ref{lem:center-basic}(c), so $|a^{+}+R|=|B|\ge\min(|B|,|a+R|+1)$.
+\end{proof}
+
+\begin{theorem}[Zhuk: the left center absorbs]\label{thm:center-absorbs}
+Let $\bA,\bB$ be finite idempotent algebras, let $R\le\bA\times\bB$ be
+subdirect with left center $C$, and let $t\in\Tm(k)$ be Taylor on $B$. If
+$\bB$ has no proper binary absorbing subalgebra, then the term
+$t^{*(|B|-1)}$ of Definition~\ref{def:star} witnesses $C\ab\bA$. In particular
+$C\ab\bA$.
+\end{theorem}
+\begin{proof}
+We prove by induction on $\ell\ge0$ the following statement: for every
+$a\in A$, every $p\in[k^{\ell}]$ and all $c_1,\dots,c_{k^{\ell}}\in C$,
+\[
+ \bigl|\,\bigl(t^{*\ell}\bigr)^{\bA}(c_1,\dots,c_{p-1},a,c_{p+1},\dots,c_{k^{\ell}})+R\,\bigr|
+ \;\ge\;\min\bigl(|B|,\;|a+R|+\ell\bigr).
+ \tag{$\ast_\ell$}
+\]
+
+For $\ell=0$ the term is $x_1$ and the value is $a$, so ($\ast_0$) reads
+$|a+R|\ge\min(|B|,|a+R|)$, which holds by
+Lemma~\ref{lem:center-basic}(b).
+
+Assume ($\ast_\ell$). Let $a\in A$, $p\in[k^{\ell+1}]$ and
+$c_1,\dots,c_{k^{\ell+1}}\in C$, and write $p=(j-1)k^{\ell}+q$ with $j\in[k]$,
+$q\in[k^{\ell}]$ as in Definition~\ref{def:star}. Then
+\[
+ \bigl(t^{*(\ell+1)}\bigr)^{\bA}(c_1,\dots,a,\dots,c_{k^{\ell+1}})
+ = t^{\bA}(d_1,\dots,d_k),
+\]
+where $d_j=\bigl(t^{*\ell}\bigr)^{\bA}$ applied to the $j$th block, which
+consists of elements of $C$ except for $a$ in position $q$, and where for
+$j'\ne j$ the value $d_{j'}=\bigl(t^{*\ell}\bigr)^{\bA}$ is applied to a block
+of elements of $C$ only, so $d_{j'}\in C$ by
+Lemma~\ref{lem:center-basic}(c) and Lemma~\ref{lem:preservation}.
+
+By ($\ast_\ell$), $|d_j+R|\ge\min(|B|,|a+R|+\ell)$. By
+Theorem~\ref{thm:center-step} applied to $d_j$ in position $j$ with the
+$C$-elements $d_{j'}$,
+\[
+ \bigl|t^{\bA}(d_1,\dots,d_k)+R\bigr|\ \ge\ \min\bigl(|B|,\;|d_j+R|+1\bigr)
+ \ \ge\ \min\bigl(|B|,\;|a+R|+\ell+1\bigr),
+\]
+the last step because $\min(|B|,\min(|B|,x)+1)=\min(|B|,x+1)$ for
+$x\ge0$. This is ($\ast_{\ell+1}$).
+
+Now take $\ell=|B|-1$ and let $a\in A$, $p\in[k^{\ell}]$,
+$c_1,\dots,c_{k^{\ell}}\in C$. Since $|a+R|\ge1$ by
+Lemma~\ref{lem:center-basic}(a), ($\ast_\ell$) gives
+\[
+ \bigl|\bigl(t^{*\ell}\bigr)^{\bA}(c_1,\dots,a,\dots,c_{k^{\ell}})+R\bigr|
+ \ \ge\ \min\bigl(|B|,\,1+|B|-1\bigr)=|B|,
+\]
+so the value lies in $C$ by Lemma~\ref{lem:center-basic}(b). As $p$ was
+arbitrary, $t^{*\ell}$ witnesses $C\ab\bA$ in the sense of
+Definition~\ref{def:absorption}.
+\end{proof}
+
+\begin{remark}[The degenerate arity]\label{rem:star-degenerate}
+If $|B|=1$ the exponent is $\ell=0$ and the witnessing term is $x_1$; this is
+correct, since $R$ subdirect and $|B|=1$ force $R=A\times B$ and $C=A$.
+\end{remark}
+
+\section{The center is central}\label{sec:central}
+
+\begin{theorem}[Zhuk: centrality of the left center]\label{thm:center-central}
+Let $\bA,\bB$ be finite idempotent algebras and let $R\le\bA\times\bB$ be
+subdirect with left center $C$. Assume $\bB$ has no proper binary absorbing
+subalgebra. Then for every $a\in A\setminus C$,
+\[
+ (a,a)\;\notin\;\Sg_{\bA^2}\Bigl(\bigl(\{a\}\times C\bigr)\cup\bigl(C\times C\bigr)\cup\bigl(C\times\{a\}\bigr)\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+Write $G:=(\{a\}\times C)\cup(C\times C)\cup(C\times\{a\})$ and suppose
+$(a,a)\in\Sg_{\bA^2}(G)$. If $C=\varnothing$ then $G=\varnothing$ and
+$\Sg_{\bA^2}(\varnothing)=\varnothing$, since $\sigma$ has no nullary symbols;
+so $C\ne\varnothing$ and $G\ne\varnothing$.
+
+\emph{Normal form for the generators.} The three sets $\{a\}\times C$,
+$C\times C$ and $C\times\{a\}$ are pairwise disjoint: a pair lying in two of
+them would force $a\in C$. Enumerate $G$ so that the elements of
+$\{a\}\times C$ come first, then those of $C\times C$, then those of
+$C\times\{a\}$. By Lemma~\ref{lem:sg-terms} there are $N\ge1$, an enumeration
+$g_1,\dots,g_N$ of $G$ of this shape and a term $s\in\Tm(N)$ with
+$(a,a)=s^{\bA^2}(g_1,\dots,g_N)$. Let $n:=N$, $t:=s$ and let $0\le p\le q\le n$
+be such that
+\[
+ g_r=(a,\gamma_r)\ (r\le p),\qquad
+ g_r=(\gamma'_r,\gamma_r)\ (p<r\le q),\qquad
+ g_r=(\gamma'_r,a)\ (r>q),
+\]
+with all $\gamma_r,\gamma'_r\in C$. (Only $p\le q$ is used; it holds because the
+three blocks are consecutive in this order.) Reading the two coordinates of
+$(a,a)=t^{\bA^2}(g_1,\dots,g_n)$ separately gives
+\begin{align}
+ a&=t^{\bA}\bigl(\underbrace{a,\dots,a}_{p},\,\gamma'_{p+1},\dots,\gamma'_{n}\bigr),
+   \label{eq:row1}\\
+ a&=t^{\bA}\bigl(\gamma_{1},\dots,\gamma_{q},\,\underbrace{a,\dots,a}_{n-q}\bigr).
+   \label{eq:row2}
+\end{align}
+
+\emph{Claim 1.} If $z_1,\dots,z_p\in a+R$ and $z_{p+1},\dots,z_n\in B$, then
+$t^{\bB}(z_1,\dots,z_n)\in a+R$.
+
+Indeed, $(a,z_r)\in R$ for $r\le p$ because $z_r\in a+R$, and
+$(\gamma'_r,z_r)\in R$ for $r>p$ because $\gamma'_r\in C$ and $z_r\in B$.
+Applying $t$ coordinatewise (Lemma~\ref{lem:preservation}) and using
+\eqref{eq:row1} for the first coordinate gives
+$\bigl(a,\,t^{\bB}(\vec z)\bigr)\in R$, i.e.\ $t^{\bB}(\vec z)\in a+R$.
+
+\emph{Claim 2.} If $z_1,\dots,z_q\in B$ and $z_{q+1},\dots,z_n\in a+R$, then
+$t^{\bB}(z_1,\dots,z_n)\in a+R$.
+
+Indeed, $(\gamma_r,z_r)\in R$ for $r\le q$ because $\gamma_r\in C$ and
+$z_r\in B$, and $(a,z_r)\in R$ for $r>q$. Applying $t$ coordinatewise and
+using \eqref{eq:row2} gives $\bigl(a,\,t^{\bB}(\vec z)\bigr)\in R$.
+
+\emph{Conclusion.} Choose any $m$ with $p\le m\le q$; such an $m$ exists because
+$p\le q$. Let
+\[
+ f:=t(\underbrace{x_1,\dots,x_1}_{m},\underbrace{x_2,\dots,x_2}_{n-m})\in\Tm(2).
+\]
+For $e\in a+R$ and $b\in B$: in $f^{\bB}(e,b)$ the first $m$ arguments equal
+$e$ and the rest equal $b$; since $m\ge p$, the first $p$ arguments lie in
+$a+R$ and all arguments lie in $B$, so Claim~1 gives $f^{\bB}(e,b)\in a+R$.
+For $b\in B$ and $e\in a+R$: in $f^{\bB}(b,e)$ the first $m$ arguments equal
+$b$ and the rest equal $e$; since $m\le q$, the arguments in positions
+$q+1,\dots,n$ all equal $e\in a+R$, and all arguments lie in $B$, so Claim~2
+gives $f^{\bB}(b,e)\in a+R$.
+
+Hence $a+R\abin\bB$. By Lemma~\ref{lem:center-basic}(a) it is nonempty, and it
+is a proper subuniverse of $B$ because $a\notin C$. This contradicts the
+hypothesis on $\bB$ together with Convention~\ref{conv:subalgebra}.
+\end{proof}
+
+\begin{definition}[Central absorption]\label{def:central-absorption}
+Let $C\le\bA$. We say $C$ \emph{centrally absorbs} $\bA$, written $C\aZ\bA$,
+if
+\begin{enumerate}\alphlabels\tightlist
+\item $C\ab\bA$, and
+\item for every $a\in A\setminus C$,
+      $\;(a,a)\notin\Sg_{\bA^2}\bigl((\{a\}\times C)\cup(C\times\{a\})\bigr)$.
+\end{enumerate}
+\end{definition}
+
+\begin{corollary}[Zhuk's center theorem]\label{cor:zhuk-center}
+Let $\bA,\bB$ be finite idempotent algebras and $R\le\bA\times\bB$ subdirect
+with left center $C$. If some $t\in\Tm(k)$ is Taylor on $B$ and $\bB$ has no
+proper binary absorbing subalgebra, then $C\aZ\bA$.
+\end{corollary}
+\begin{proof}
+Condition (a) of Definition~\ref{def:central-absorption} is
+Theorem~\ref{thm:center-absorbs}. For (b), note
+$(\{a\}\times C)\cup(C\times\{a\})\subseteq
+ (\{a\}\times C)\cup(C\times C)\cup(C\times\{a\})$, so the generated
+subuniverses are nested by Lemma~\ref{lem:generation}(c), and
+Theorem~\ref{thm:center-central} applies.
+\end{proof}
+
+\section{The essential doubling trick}\label{sec:doubling}
+
+\begin{lemma}[Zhuk--Kozik essential doubling]\label{lem:doubling}
+Let $n\ge1$ and let $\bA_0,\dots,\bA_{n+1}$ be algebras with $\bA_{n+1}$ finite
+and idempotent. Let $C\le\bA_0$, $B_i\le\bA_i$ for $i\in[n]$, and
+$C'\le\bA_{n+1}$ with $C'\aZ\bA_{n+1}$. If there exists a
+$(C,B_1,\dots,B_n,C')$-essential relation
+$R\le\bA_0\times\cdots\times\bA_{n+1}$, then there exists a
+$(C,B_1,\dots,B_n,B_n,\dots,B_1,C)$-essential relation
+\[
+ R'\;\le\;\bA_0\times\cdots\times\bA_n\times\bA_n\times\cdots\times\bA_0
+\]
+of arity $2n+2$.
+\end{lemma}
+\begin{proof}
+For a relation $P\le\bA_0\times\cdots\times\bA_{n+1}$ write
+\[
+ \beta(P):=\pi_{n+1}\bigl(P\cap(C\times B_1\times\cdots\times B_n\times A_{n+1})\bigr)\;\le\;\bA_{n+1},
+\]
+a subuniverse by Lemma~\ref{lem:pp}(b),(c).
+
+\emph{Step 0: choose $R$ minimizing $|\beta(R)|$.} The family of
+$(C,B_1,\dots,B_n,C')$-essential relations is nonempty by hypothesis, and
+$|\beta(P)|$ is a natural number bounded by $|A_{n+1}|$; choose $R$ in the
+family with $|\beta(R)|$ least, and write $B':=\beta(R)$. This uses only the
+finiteness of $A_{n+1}$.
+
+By \eqref{eq:E1} at index $n+1$, $B'\ne\varnothing$. By \eqref{eq:E2},
+$B'\cap C'=\varnothing$: an element of the intersection would be the last
+coordinate of a tuple of $R$ lying in $C\times B_1\times\cdots\times B_n\times C'$.
+By Lemma~\ref{lem:essential-nonempty}, $C$, the $B_i$ and $C'$ are all nonempty.
+
+\emph{Step 1: $b,b'\in B'\implies b'\in\Sg_{\bA_{n+1}}(C'\cup\{b\})$.}
+Fix $b\in B'$. For each $i\in\{0,\dots,n\}$ let
+$\vec x^{\,(i)}\in R\cap(C\times B_1\times\cdots\times A_i\times\cdots\times B_n\times C')$
+be the witness of \eqref{eq:E1} at index $i$; note
+$x^{(i)}_{n+1}\in C'$. Let $\vec y\in R\cap(C\times B_1\times\cdots\times B_n\times A_{n+1})$
+have $y_{n+1}=b$, which exists because $b\in B'$. Put
+\[
+ R'':=\Sg_{\bA_0\times\cdots\times\bA_{n+1}}\bigl(\{\vec x^{\,(0)},\dots,\vec x^{\,(n)},\vec y\}\bigr)\subseteq R .
+\]
+Then $R''$ is $(C,B_1,\dots,B_n,C')$-essential: \eqref{eq:E1} at index $i\le n$
+is witnessed by $\vec x^{\,(i)}$, \eqref{eq:E1} at index $n+1$ by $\vec y$, and
+\eqref{eq:E2} holds because $R''\subseteq R$. By minimality
+$|\beta(R'')|\ge|B'|$, while $\beta(R'')\subseteq\beta(R)=B'$ because
+$R''\subseteq R$; hence $\beta(R'')=B'$. On the other hand
+Lemma~\ref{lem:hom-image}(c) applied to $\pi_{n+1}$ gives
+\[
+ \pi_{n+1}(R'')=\Sg_{\bA_{n+1}}\bigl(\{x^{(0)}_{n+1},\dots,x^{(n)}_{n+1},b\}\bigr)
+ \subseteq\Sg_{\bA_{n+1}}\bigl(C'\cup\{b\}\bigr),
+\]
+using Lemma~\ref{lem:generation}(c) for the inclusion. Since
+$B'=\beta(R'')\subseteq\pi_{n+1}(R'')$, every $b'\in B'$ lies in
+$\Sg_{\bA_{n+1}}(C'\cup\{b\})$.
+
+\emph{Step 2: the linking relation.} Fix $b\in B'$ as in Step 1 and set
+\[
+ S:=\Sg_{\bA_{n+1}^2}\bigl((\{b\}\times C')\cup(C'\times\{b\})\bigr)\;\le\;\bA_{n+1}^2 .
+\]
+The generating set is symmetric, so $S$ is a symmetric relation; the source
+records this, but the argument below never uses it, drawing instead on the two
+generating blocks separately. A formalization may therefore omit the symmetry
+of $S$ entirely.
+
+\emph{Step 3: $S\cap(B'\times B')=\varnothing$.} Suppose $(b',b'')\in S$ with
+$b',b''\in B'$.
+
+Let $P:=\pi_1\bigl(S\cap(A_{n+1}\times B')\bigr)\le\bA_{n+1}$, the set of
+elements having an $S$-neighbor in $B'$, a subuniverse by
+Lemma~\ref{lem:pp}(b),(c). Every $c\in C'$ lies in $P$, since $(c,b)\in S$ and
+$b\in B'$; and $b'\in P$, since $(b',b'')\in S$ and $b''\in B'$. Hence
+$\Sg_{\bA_{n+1}}(C'\cup\{b'\})\subseteq P$ by Lemma~\ref{lem:generation}(c). By
+Step 1 applied to the pair $b',b\in B'$ we have
+$b\in\Sg_{\bA_{n+1}}(C'\cup\{b'\})$, so $b\in P$: there is $b'''\in B'$ with
+$(b,b''')\in S$.
+
+Let $Q:=\pi_2\bigl(S\cap(\{b\}\times A_{n+1})\bigr)\le\bA_{n+1}$, using
+$\{b\}\le\bA_{n+1}$ from Lemma~\ref{lem:singleton}. Every $c\in C'$ lies in $Q$,
+since $(b,c)\in S$; and $b'''\in Q$. Hence
+$\Sg_{\bA_{n+1}}(C'\cup\{b'''\})\subseteq Q$. By Step~1 applied to the pair
+$b''',b\in B'$ we have $b\in\Sg_{\bA_{n+1}}(C'\cup\{b'''\})$, so $b\in Q$, that
+is, $(b,b)\in S$.
+
+But $b\notin C'$, because $b\in B'$ and $B'\cap C'=\varnothing$. So
+$(b,b)\in S$ contradicts condition (b) of
+Definition~\ref{def:central-absorption} for $C'\aZ\bA_{n+1}$, whose generating
+set is exactly the one defining $S$.
+
+\emph{Step 4: the doubled relation.} Define
+\[
+ R':=\bigl\{(x_0,\dots,x_n,y_n,\dots,y_0)\;:\;
+   \exists\,x_{n+1},y_{n+1}\in A_{n+1}\ \ \vec x\in R,\ \vec y\in R,\ (x_{n+1},y_{n+1})\in S\bigr\},
+\]
+where $\vec x=(x_0,\dots,x_{n+1})$ and $\vec y=(y_0,\dots,y_{n+1})$. It is a
+subuniverse of $\bA_0\times\cdots\times\bA_n\times\bA_n\times\cdots\times\bA_0$:
+form the relation
+\[
+ T:=\bigl\{(\vec x,\vec y)\in
+ \textstyle\prod_{i=0}^{n+1}A_i\times\prod_{i=0}^{n+1}A_i \;:\;
+   \vec x\in R,\ \vec y\in R,\ (x_{n+1},y_{n+1})\in S\bigr\},
+\]
+which is an intersection of three cylinders --- the preimages of $R$, of $R$ and
+of $S$ under the projections onto the $\vec x$ coordinates, the $\vec y$
+coordinates, and the pair $(x_{n+1},y_{n+1})$ respectively --- each a
+subuniverse of the $(2n+4)$-fold product by Lemma~\ref{lem:pp}(d), so
+$T$ is a subuniverse by Lemma~\ref{lem:pp}(a). Now project away the two
+coordinates carrying $x_{n+1},y_{n+1}$ and reorder the surviving $y$
+coordinates into the order $y_n,\dots,y_0$, using Lemma~\ref{lem:pp}(c),(e).
+
+Label the coordinates of $R'$ as $0,\dots,n$ on the $x$-side and
+$n^{\dagger},\dots,0^{\dagger}$ on the $y$-side, with designated subuniverses
+$C,B_1,\dots,B_n$ and $B_n,\dots,B_1,C$ respectively.
+
+\eqref{eq:E1} \emph{at an $x$-side coordinate $i\in\{0,\dots,n\}$}: take
+$\vec x=\vec x^{\,(i)}$, so $x_{n+1}\in C'$, and take
+$\vec y\in R\cap(C\times B_1\times\cdots\times B_n\times\{b\})$, which exists
+because $b\in B'$. Then $(x_{n+1},b)\in C'\times\{b\}\subseteq S$, so the
+resulting tuple lies in $R'$; its $x$-side has the free coordinate at $i$ and
+designated entries elsewhere, and its $y$-side is entirely designated.
+
+\eqref{eq:E1} \emph{at a $y$-side coordinate}: symmetric, exchanging the roles
+of $\vec x$ and $\vec y$ and using $\{b\}\times C'\subseteq S$.
+
+\eqref{eq:E2}: suppose $(x_0,\dots,x_n,y_n,\dots,y_0)\in R'$ with
+$x_0,y_0\in C$ and $x_i,y_i\in B_i$ for $i\in[n]$, witnessed by
+$x_{n+1},y_{n+1}$. Then $x_{n+1}\in\beta(R)=B'$ and $y_{n+1}\in B'$ by the
+definition of $\beta$, while $(x_{n+1},y_{n+1})\in S$; this contradicts Step~3.
+\end{proof}
+
+\section{Central absorption is ternary}\label{sec:ternary}
+
+\begin{corollary}[Central absorption is witnessed by a ternary term]\label{cor:central-ternary}
+Let $\bA$ be a finite idempotent algebra and $C\le\bA$ with $C\aZ\bA$. Then
+some $s\in\Tm(3)$ witnesses $C\ab\bA$.
+\end{corollary}
+\begin{proof}
+Suppose not. By Theorem~\ref{thm:relational-absorption} there exists a
+$C$-essential relation of arity $3$. Since $C\ab\bA$ holds by
+Definition~\ref{def:central-absorption}(a),
+Corollary~\ref{cor:unbounded-no-absorption} provides a largest arity $M$ of a
+$C$-essential relation, and $M\ge3$.
+
+Let $R\le\bA^{M}$ be $C$-essential of arity $M$ and write $M=n+2$ with
+$n=M-2\ge1$. Then $R$ is $(C,B_1,\dots,B_n,C')$-essential for
+$\bA_0=\cdots=\bA_{n+1}=\bA$, $B_1=\cdots=B_n=C$ and $C'=C$, and $C'\aZ\bA$ by
+hypothesis. Lemma~\ref{lem:doubling} produces a
+$(C,C,\dots,C)$-essential relation of arity $2n+2=2M-2$. Since $M\ge3$ we have
+$2M-2\ge M+1>M$, contradicting the maximality of $M$.
+\end{proof}
+
+\begin{remark}[The arities produced]\label{rem:arities}
+Iterating Lemma~\ref{lem:doubling} from arity $3$ produces $C$-essential
+relations of arities $3,4,6,10,18,\dots$, that is $2+2^{k}$, since
+$2(2+2^{k})-2=2+2^{k+1}$. Corollary~\ref{cor:central-ternary} is arranged so
+that only the strict increase $2M-2>M$ for $M\ge3$ is needed, which removes the
+induction.
+\end{remark}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By Corollary~\ref{cor:zhuk-center}, $C\aZ\bA$. By
+Corollary~\ref{cor:central-ternary} there is $s\in\Tm(3)$ witnessing
+$C\ab\bA$, which by Definition~\ref{def:absorption} is exactly the displayed
+containment.
+\end{proof}
+
+\begin{remark}[What is \emph{not} proved here]\label{rem:not-proved}
+Section~3.10 of~\cite{BradyNotes} continues past
+Corollary~\ref{cor:central-ternary}: central absorption is shown to be
+compatible with quotients, transitively closed and compatible with products,
+hence a ``good absorption concept''; a single ternary term is shown to witness
+$C\aZ\bB$ simultaneously for all $C\aZ\bB$ with $\bB\in HSP(\bA)$; and a
+criterion is given for central absorption to imply binary absorption. Those
+results, and the Absorption Theorem of~\cite{BartoKozikCyclic} that they feed,
+are outside the scope of this document.
+\end{remark}
+
+\appendix
+
+\section{Statement-level citation index}\label{app:dependency-graph}
+
+This appendix records, for every labeled numbered statement, the labeled
+statements cited in its statement and proof. The table is generated
+mechanically from the citation commands in the source, so it is a syntactic
+citation list rather than a semantic closure: a fact used without a citation
+command does not appear here. Facts imported from outside the manuscript are
+collected instead in the intended imported-background package of
+\hyperref[app:background]{Appendix~C}. One row cites forward: the main theorem,
+Theorem~\ref{thm:main}, which is stated before its deferred proof.
+
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
+\hline
+Statement & Direct internal prerequisites \\
+\hline
+\endfirsthead
+\hline
+Statement & Direct internal prerequisites \\
+\hline
+\endhead
+\hline
+\multicolumn{2}{r}{\small Continued on next page} \\
+\endfoot
+\hline
+\endlastfoot
+Theorem~\ref{thm:main}\newline\emph{Main theorem} & Definition~\ref{def:taylor}, Definition~\ref{def:absorption}, Corollary~\ref{cor:zhuk-center} and Corollary~\ref{cor:central-ternary} \\
+Definition~\ref{def:algebra}\newline\emph{Signature and algebra} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:idempotent}\newline\emph{Idempotence} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:subuniverse}\newline\emph{Subuniverse} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Convention~\ref{conv:subalgebra}\newline\emph{Subalgebra means nonempty} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Lemma~\ref{lem:generation}\newline\emph{Intersections and generation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Lemma~\ref{lem:singleton}\newline\emph{Singletons} & Definition~\ref{def:idempotent} \\
+Definition~\ref{def:product}\newline\emph{Products} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:term}\newline\emph{Terms} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Lemma~\ref{lem:term-idempotent}\newline\emph{Term operations are idempotent} & Definition~\ref{def:idempotent} \\
+Lemma~\ref{lem:preservation}\newline\emph{Preservation} & Definition~\ref{def:subuniverse} \\
+Lemma~\ref{lem:sg-terms}\newline\emph{Generation by a fixed list} & Lemma~\ref{lem:preservation} and Lemma~\ref{lem:generation} \\
+Remark~\ref{rem:fixed-list}\newline\emph{Why a fixed list} & Theorem~\ref{thm:center-central} \\
+Definition~\ref{def:hom}\newline\emph{Homomorphism} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Lemma~\ref{lem:hom-image}\newline\emph{Images and generation} & Lemma~\ref{lem:sg-terms} \\
+Lemma~\ref{lem:pp}\newline\emph{Relational constructions} & Lemma~\ref{lem:generation} and Lemma~\ref{lem:hom-image} \\
+Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Definition~\ref{def:neighborhood} and Lemma~\ref{lem:doubling} \\
+Definition~\ref{def:absorption}\newline\emph{Absorption} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Remark~\ref{rem:absorption-quantifier}\newline\emph{The quantifier form matters} & Definition~\ref{def:absorption} and Theorem~\ref{thm:relational-absorption} \\
+Remark~\ref{rem:absorption-degenerate}\newline\emph{Empty and full} & Convention~\ref{conv:subalgebra} \\
+Definition~\ref{def:taylor}\newline\emph{Taylor identities} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Remark~\ref{rem:taylor-usual}\newline\emph{Relation to the usual definition} & Definition~\ref{def:taylor} and Theorem~\ref{thm:center-step} \\
+Lemma~\ref{lem:taylor-binary}\newline\emph{One-sided closure gives binary absorption} & Definition~\ref{def:absorption} \\
+Definition~\ref{def:star}\newline\emph{Star powers} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:essential}\newline\emph{Essential relation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Lemma~\ref{lem:essential-nonempty}\newline\emph{Essentiality forces nonemptiness} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Proposition~\ref{prop:essential-down}\newline\emph{Passing to smaller arity} & Lemma~\ref{lem:pp} \\
+Proposition~\ref{prop:absorption-blocks}\newline\emph{Absorption forbids essential relations} & Lemma~\ref{lem:preservation} and Definition~\ref{def:absorption} \\
+Corollary~\ref{cor:absorption-bound}\newline\emph{Absorption bounds essential arity} & Proposition~\ref{prop:essential-down} and Proposition~\ref{prop:absorption-blocks} \\
+Lemma~\ref{lem:essential-groups}\newline\emph{Regrouping} & Lemma~\ref{lem:pp} \\
+Lemma~\ref{lem:clo-subuniverse}\newline\emph{The free algebra on $m$ generators} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Theorem~\ref{thm:relational-absorption}\newline\emph{Relational description of absorption} & Proposition~\ref{prop:absorption-blocks}, Definition~\ref{def:absorption}, Lemma~\ref{lem:clo-subuniverse}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups} and Lemma~\ref{lem:preservation} \\
+Corollary~\ref{cor:unbounded-no-absorption}\newline\emph{Unbounded arity defeats absorption} & Corollary~\ref{cor:absorption-bound} \\
+Definition~\ref{def:subdirect}\newline\emph{Subdirect} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:neighborhood}\newline\emph{Neighborhood and left center} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Lemma~\ref{lem:center-basic}\newline\emph{Basic properties} & Lemma~\ref{lem:singleton}, Lemma~\ref{lem:pp} and Lemma~\ref{lem:preservation} \\
+Remark~\ref{rem:degenerate-center}\newline\emph{Degenerate centers} & Remark~\ref{rem:absorption-degenerate} \\
+Theorem~\ref{thm:center-step}\newline\emph{One step towards the center} & Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:term-idempotent}, Lemma~\ref{lem:taylor-binary}, Definition~\ref{def:taylor} and Convention~\ref{conv:subalgebra} \\
+Theorem~\ref{thm:center-absorbs}\newline\emph{Zhuk: the left center absorbs} & Definition~\ref{def:star}, Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:preservation}, Theorem~\ref{thm:center-step} and Definition~\ref{def:absorption} \\
+Remark~\ref{rem:star-degenerate}\newline\emph{The degenerate arity} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Theorem~\ref{thm:center-central}\newline\emph{Zhuk: centrality of the left center} & Lemma~\ref{lem:sg-terms}, Lemma~\ref{lem:preservation}, Lemma~\ref{lem:center-basic} and Convention~\ref{conv:subalgebra} \\
+Definition~\ref{def:central-absorption}\newline\emph{Central absorption} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Corollary~\ref{cor:zhuk-center}\newline\emph{Zhuk's center theorem} & Definition~\ref{def:central-absorption}, Theorem~\ref{thm:center-absorbs}, Lemma~\ref{lem:generation} and Theorem~\ref{thm:center-central} \\
+Lemma~\ref{lem:doubling}\newline\emph{Zhuk--Kozik essential doubling} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-nonempty}, Lemma~\ref{lem:hom-image}, Lemma~\ref{lem:generation}, Lemma~\ref{lem:singleton} and Definition~\ref{def:central-absorption} \\
+Corollary~\ref{cor:central-ternary}\newline\emph{Central absorption is witnessed by a ternary term} & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:central-absorption}, Corollary~\ref{cor:unbounded-no-absorption} and Lemma~\ref{lem:doubling} \\
+Remark~\ref{rem:arities}\newline\emph{The arities produced} & Lemma~\ref{lem:doubling} and Corollary~\ref{cor:central-ternary} \\
+Remark~\ref{rem:not-proved}\newline\emph{What is \emph{not} proved here} & Corollary~\ref{cor:central-ternary} \\
+\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Lemma~\ref{lem:taylor-binary}, Lemma~\ref{lem:essential-groups}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Lemma~\ref{lem:doubling}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Lemma~\ref{lem:preservation} and Proposition~\ref{prop:absorption-blocks} \\
+\end{longtable}
+
+\section{Suggested module order}\label{app:module-order}
+
+The citation index above, together with the imported background of
+\hyperref[app:background]{Appendix~C}, approximates but does not determine the
+import obligations of each module. A coarser topological order, useful for
+organizing source files, is:
+\begin{enumerate}\tightlist
+\item signatures, algebras, subuniverses, generation, products, homomorphisms;
+\item terms, term operations, preservation, generation by a fixed list,
+      variable renaming along a permutation;
+\item the relational constructions of Lemma~\ref{lem:pp} and the singleton
+      lemma;
+\item absorption, binary absorption, Taylor identities, and
+      Lemma~\ref{lem:taylor-binary};
+\item essential relations, arity reduction, and the block-regrouping
+      Lemma~\ref{lem:essential-groups};
+\item $\Clo_m(\bA)$ as a subuniverse of $\bA^{A^m}$, and the relational
+      description of absorption;
+\item neighborhoods $a+R$, left centers, the enlargement step, star powers, and
+      Theorem~\ref{thm:center-absorbs};
+\item central absorption, Theorem~\ref{thm:center-central}, the doubling trick,
+      and the ternary collapse.
+\end{enumerate}
+
+Modules 1--3 are reusable universal-algebra infrastructure with no reference to
+absorption. Module 6 is the only place where an algebra of functions
+($\bA^{A^m}$) is formed, and hence the only place where an exponentially large
+index set appears; nothing is computed there, so the size is immaterial, but a
+formalization should expect the type $\bA^{A^m}$ rather than a list-based
+encoding of terms to be the convenient object.
+
+\section{Imported background}\label{app:background}
+
+The following background package collects, in the form used, the facts imported
+but not proved in this manuscript. A formal development should obtain these
+from its ambient libraries.
+
+\begin{enumerate}
+\item \textbf{Finite sets and cardinality.} For finite sets $X\subseteq Y$:
+      $|X|\le|Y|$, with equality if and only if $X=Y$; and if
+      $X\subsetneq Y$ then $|X|+1\le|Y|$. A nonempty set of natural numbers
+      bounded above has a greatest element; a nonempty set of natural numbers
+      has a least element.
+\item \textbf{Arithmetic of $\min$.} For natural numbers,
+      $\min(N,\min(N,x)+1)=\min(N,x+1)$.
+\item \textbf{Induction.} Structural induction on an inductively defined type
+      of terms; strong induction on the natural numbers.
+\item \textbf{Products and functions.} Indexed products of sets, tuples and
+      their coordinate projections, restriction of a function to a subset,
+      composition, images and preimages, and the elementary facts that images
+      preserve unions and that a projection of an intersection is contained in
+      the intersection of the projections.
+\item \textbf{Permutations.} A finite list may be reordered by a permutation of
+      its index set; equivalently, for a finite set $G$ and a partition of $G$
+      into three blocks there is an enumeration of $G$ listing the blocks
+      consecutively. Only this consequence is used
+      (Theorem~\ref{thm:center-central}).
+\end{enumerate}
+
+The list is intended to cover the imported inferences, without a claim of
+demonstrated exhaustiveness; reviewers are invited to report any use of
+background not covered by an item above.
+
+\section{Concordance with the source}\label{app:concordance}
+
+Section~3.10 of~\cite{BradyNotes} states its results under the numbers in the
+left column. The correspondence is one-to-one except that the enlargement step,
+which appears inside the proof of Theorem 3.10.5 there, is isolated here.
+
+\begin{longtable}{@{}p{0.34\textwidth}p{0.58\textwidth}@{}}
+\textbf{\cite{BradyNotes}, \S3.8 and \S3.10} & \textbf{This document}\\
+\hline
+Proposition 3.8.2 & Proposition~\ref{prop:essential-down}\\
+Proposition 3.8.3 & Proposition~\ref{prop:absorption-blocks}\\
+Corollary 3.8.4 & not used\\
+Theorem 3.8.5 & Theorem~\ref{thm:relational-absorption}\\
+Lemma 3.8.6 & Lemma~\ref{lem:essential-groups}\\
+Definition 3.10.3 & Definition~\ref{def:neighborhood}\\
+Lemma 3.10.4 & Lemma~\ref{lem:taylor-binary}\\
+Theorem 3.10.5 & Theorem~\ref{thm:center-step} and Theorem~\ref{thm:center-absorbs}\\
+Theorem 3.10.6 & Theorem~\ref{thm:center-central}\\
+Definition 3.10.7 & Definition~\ref{def:central-absorption}\\
+Corollary 3.10.8 & Corollary~\ref{cor:zhuk-center}\\
+Lemma 3.10.9 & Lemma~\ref{lem:doubling}\\
+Corollary 3.10.10 & Corollary~\ref{cor:central-ternary}\\
+Corollaries 3.10.11--3.10.13 & not covered; see Remark~\ref{rem:not-proved}\\
+Propositions 3.10.14--3.10.19 & not covered; see Remark~\ref{rem:not-proved}\\
+\end{longtable}
+
+The numbering of \S3.8 above follows the printed notes; Proposition 3.8.2 is
+the statement labelled \texttt{prop-essential-down} in the source, Proposition
+3.8.3 is \texttt{prop-absorption-essential}, Theorem 3.8.5 is
+\texttt{absorption-essential} and Lemma 3.8.6 is \texttt{essential-groups}.
+
+\begin{thebibliography}{9}
+\bibitem{BartoKozikCyclic}
+L.~Barto and M.~Kozik,
+\emph{Absorbing subalgebras, cyclic terms, and the constraint satisfaction problem},
+Logical Methods in Computer Science \textbf{8} (2012), no.~1, 1--26.
+
+\bibitem{BartoKozikDeciding}
+L.~Barto and M.~Kozik,
+\emph{Absorption in universal algebra and CSP},
+in: The Constraint Satisfaction Problem: Complexity and Approximability,
+Dagstuhl Follow-Ups \textbf{7} (2017), 45--77.
+
+\bibitem{BradyNotes}
+Z.~Brady,
+\emph{Notes on CSPs and polymorphisms},
+arXiv:2210.07383; current version at \url{https://notzeb.com/csp-notes.pdf}.
+
+\bibitem{Zhuk}
+D.~Zhuk,
+\emph{A proof of the CSP dichotomy conjecture},
+Journal of the ACM \textbf{67} (2020), no.~5, article 30.
+\end{thebibliography}
+
+\end{document}

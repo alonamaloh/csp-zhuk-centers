@@ -1,0 +1,18 @@
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Local reference copies of Brady's notes, fetched from github.com/notzeb/all.
+# Not redistributed here; see the README for where to get them.
+csp.tex
+csp-notes.tex
+csp-notes.pdf
+csp-notes.txt
+csp-append.tex
+preamble.tex
