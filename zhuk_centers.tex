@@ -152,9 +152,12 @@ products. In particular the following are proved rather than assumed:
 \noindent\textbf{Route.} Part~I fixes the universal-algebraic vocabulary and
 proves the handful of closure facts used everywhere: subuniverses are closed
 under term operations, generated subuniverses are term images of a fixed
-generator list, homomorphisms commute with generation, and the two relational
-constructions (intersection with a box, and projection) preserve
-subuniverses. It ends with absorption, binary absorption, and the lemma
+generator list, homomorphisms commute with generation, and the five relational
+constructions of Lemma~\ref{lem:pp} --- intersection, intersection with a box,
+projection, cylinder and reindexing --- preserve subuniverses. All five are
+used: reindexing in the base case of Lemma~\ref{lem:essential-groups}, and the
+cylinder in Step~4 of Lemma~\ref{lem:doubling}. Part~I ends with absorption,
+binary absorption, and the lemma
 --- Lemma~\ref{lem:taylor-binary} --- that converts a \emph{one-sided} closure
 condition into binary absorption using a single Taylor identity.
 
@@ -718,8 +721,9 @@ result of this part. It goes through a grouped form of essentiality.
 \begin{lemma}[Regrouping]\label{lem:essential-groups}
 Let $S\le\bA$, let $I$ be a finite set and let $\mathcal P=(I_1,\dots,I_m)$ be a
 partition of $I$ into $m\ge1$ nonempty blocks. If $R\le\bA^{I}$ is
-$S$-essential for $\mathcal P$, then there exists an $S$-essential relation of
-arity $m$.
+$S$-essential for $\mathcal P$ in the sense of
+Definition~\ref{def:block-essential}, then there exists an $S$-essential
+relation of arity $m$.
 \end{lemma}
 \begin{proof}
 By strong induction on $|I|$, with $m$ held fixed. Each recursive call below is
@@ -1202,12 +1206,16 @@ $B'\cap C'=\varnothing$: an element of the intersection would be the last
 coordinate of a tuple of $R$ lying in $C\times B_1\times\cdots\times B_n\times C'$.
 By Lemma~\ref{lem:essential-nonempty}, $C$, the $B_i$ and $C'$ are all nonempty.
 
-\emph{Step 1: $b,b'\in B'\implies b'\in\Sg_{\bA_{n+1}}(C'\cup\{b\})$.}
-Fix $b\in B'$. For each $i\in\{0,\dots,n\}$ let
+\emph{Step 1: the generation property of $B'$.} We prove
+\[
+ \text{for all }b_1,b_2\in B':\qquad b_2\in\Sg_{\bA_{n+1}}\bigl(C'\cup\{b_1\}\bigr).
+ \tag{$\ddagger$}
+\]
+Let $b_1\in B'$ be arbitrary. For each $i\in\{0,\dots,n\}$ let
 $\vec x^{\,(i)}\in R\cap(C\times B_1\times\cdots\times A_i\times\cdots\times B_n\times C')$
-be the witness of \eqref{eq:E1} at index $i$; note
-$x^{(i)}_{n+1}\in C'$. Let $\vec y\in R\cap(C\times B_1\times\cdots\times B_n\times A_{n+1})$
-have $y_{n+1}=b$, which exists because $b\in B'$. Put
+be the witness of \eqref{eq:E1} at index $i$; note $x^{(i)}_{n+1}\in C'$. Let
+$\vec y\in R\cap(C\times B_1\times\cdots\times B_n\times A_{n+1})$ have
+$y_{n+1}=b_1$, which exists because $b_1\in B'$. Put
 \[
  R'':=\Sg_{\bA_0\times\cdots\times\bA_{n+1}}\bigl(\{\vec x^{\,(0)},\dots,\vec x^{\,(n)},\vec y\}\bigr)\subseteq R .
 \]
@@ -1216,21 +1224,23 @@ is witnessed by $\vec x^{\,(i)}$, \eqref{eq:E1} at index $n+1$ by $\vec y$, and
 \eqref{eq:E2} holds because $R''\subseteq R$. So $R''$ is a legitimate
 competitor in the very minimization of Step~0 --- the designated subuniverses
 $C,B_1,\dots,B_n,C'$ are the same ones, and only the relation varies. By
-minimality
-$|\beta(R'')|\ge|B'|$, while $\beta(R'')\subseteq\beta(R)=B'$ because
-$R''\subseteq R$; hence $\beta(R'')=B'$. Combining this with Lemma~\ref{lem:hom-image}(c) applied to $\pi_{n+1}$, and
-with Lemma~\ref{lem:generation}(c) for the last inclusion, gives the chain
+minimality $|\beta(R'')|\ge|B'|$, while $\beta(R'')\subseteq\beta(R)=B'$ because
+$R''\subseteq R$; hence $\beta(R'')=B'$. Combining this with
+Lemma~\ref{lem:hom-image}(c) applied to $\pi_{n+1}$, and with
+Lemma~\ref{lem:generation}(c) for the last inclusion, gives the chain
 \[
  \begin{aligned}
  B'\;=\;\beta(R'')\;&\subseteq\;\pi_{n+1}(R'')\\
-   &=\;\Sg_{\bA_{n+1}}\bigl(\{x^{(0)}_{n+1},\dots,x^{(n)}_{n+1},b\}\bigr)\\
-   &\subseteq\;\Sg_{\bA_{n+1}}\bigl(C'\cup\{b\}\bigr),
+   &=\;\Sg_{\bA_{n+1}}\bigl(\{x^{(0)}_{n+1},\dots,x^{(n)}_{n+1},b_1\}\bigr)\\
+   &\subseteq\;\Sg_{\bA_{n+1}}\bigl(C'\cup\{b_1\}\bigr),
  \end{aligned}
 \]
-the last step because every $x^{(i)}_{n+1}$ lies in $C'$. Hence every $b'\in B'$
-lies in $\Sg_{\bA_{n+1}}(C'\cup\{b\})$.
+the last step because every $x^{(i)}_{n+1}$ lies in $C'$. As $b_1\in B'$ was
+arbitrary and every $b_2\in B'$ lies in the left-hand side, this is
+($\ddagger$).
 
-\emph{Step 2: the linking relation.} Fix $b\in B'$ as in Step 1 and set
+\emph{Step 2: the linking relation.} Fix from now on one particular element
+$b\in B'$, which exists because $B'\ne\varnothing$, and set
 \[
  S:=\Sg_{\bA_{n+1}^2}\bigl((\{b\}\times C')\cup(C'\times\{b\})\bigr)\;\le\;\bA_{n+1}^2 .
 \]
@@ -1246,22 +1256,38 @@ Let $P:=\pi_1\bigl(S\cap(A_{n+1}\times B')\bigr)\le\bA_{n+1}$, the set of
 elements having an $S$-neighbor in $B'$, a subuniverse by
 Lemma~\ref{lem:pp}(b),(c). Every $c\in C'$ lies in $P$, since $(c,b)\in S$ and
 $b\in B'$; and $b'\in P$, since $(b',b'')\in S$ and $b''\in B'$. Hence
-$\Sg_{\bA_{n+1}}(C'\cup\{b'\})\subseteq P$ by Lemma~\ref{lem:generation}(c). By
-Step 1 applied to the pair $b',b\in B'$ we have
-$b\in\Sg_{\bA_{n+1}}(C'\cup\{b'\})$, so $b\in P$: there is $b'''\in B'$ with
-$(b,b''')\in S$.
+$\Sg_{\bA_{n+1}}(C'\cup\{b'\})\subseteq P$ by Lemma~\ref{lem:generation}(c).
+Instantiating ($\ddagger$) at $b_1:=b'$ and $b_2:=b$ --- legitimate since
+$b',b\in B'$ --- gives $b\in\Sg_{\bA_{n+1}}(C'\cup\{b'\})$, so $b\in P$: there
+is some $b'''\in B'$ with $(b,b''')\in S$.
 
 Let $Q:=\pi_2\bigl(S\cap(\{b\}\times A_{n+1})\bigr)\le\bA_{n+1}$, using
 $\{b\}\le\bA_{n+1}$ from Lemma~\ref{lem:singleton}. Every $c\in C'$ lies in $Q$,
 since $(b,c)\in S$; and $b'''\in Q$. Hence
-$\Sg_{\bA_{n+1}}(C'\cup\{b'''\})\subseteq Q$. By Step~1 applied to the pair
-$b''',b\in B'$ we have $b\in\Sg_{\bA_{n+1}}(C'\cup\{b'''\})$, so $b\in Q$, that
-is, $(b,b)\in S$.
+$\Sg_{\bA_{n+1}}(C'\cup\{b'''\})\subseteq Q$ by Lemma~\ref{lem:generation}(c).
+Instantiating ($\ddagger$) a second time, now at $b_1:=b'''$ and $b_2:=b$ ---
+legitimate since $b''',b\in B'$ --- gives
+$b\in\Sg_{\bA_{n+1}}(C'\cup\{b'''\})$, so $b\in Q$, that is, $(b,b)\in S$.
 
 But $b\notin C'$, because $b\in B'$ and $B'\cap C'=\varnothing$. So
 $(b,b)\in S$ contradicts condition (b) of
 Definition~\ref{def:central-absorption} for $C'\aZ\bA_{n+1}$, whose generating
 set is exactly the one defining $S$.
+
+\begin{remark}[The shape of Step 3]\label{rem:step3-shape}
+Step~3 is the only argument in this document that doubles back on itself, and
+it is worth recording the dependency explicitly. ($\ddagger$) is a
+\emph{universally quantified} statement about ordered pairs from $B'$,
+established in Step~1 before any element of Step~3 is named. Step~3 then uses
+it twice, at the pairs $(b',b)$ and $(b''',b)$, and the second of these applies
+it to $b'''$, an element that Step~3 itself produced from the first
+application. There is no circularity: $b'''$ is supplied with the side
+condition $b'''\in B'$, which is all ($\ddagger$) requires of its arguments.
+A formalization should therefore prove ($\ddagger$) as a standalone lemma
+quantified over both arguments, rather than as an assertion about the
+particular $b$ fixed in Step~2 --- the latter is the form in which the source
+states it, and it does not suffice for the second application.
+\end{remark}
 
 \emph{Step 4: the doubled relation.} Define
 \[
@@ -1426,7 +1452,7 @@ Lemma~\ref{lem:essential-nonempty}\newline\emph{Essentiality forces nonemptiness
 Proposition~\ref{prop:essential-down}\newline\emph{Passing to smaller arity} & Lemma~\ref{lem:pp} \\
 Proposition~\ref{prop:absorption-blocks}\newline\emph{Absorption forbids essential relations} & Lemma~\ref{lem:preservation} and Definition~\ref{def:absorption} \\
 Corollary~\ref{cor:absorption-bound}\newline\emph{Absorption bounds essential arity} & Proposition~\ref{prop:essential-down} and Proposition~\ref{prop:absorption-blocks} \\
-Lemma~\ref{lem:essential-groups}\newline\emph{Regrouping} & Lemma~\ref{lem:pp} \\
+Lemma~\ref{lem:essential-groups}\newline\emph{Regrouping} & Definition~\ref{def:block-essential} and Lemma~\ref{lem:pp} \\
 Remark~\ref{rem:regrouping-weaker}\newline\emph{A weaker regrouping than the source's} & Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:pp} \\
 Lemma~\ref{lem:clo-subuniverse}\newline\emph{The algebra of $m$-ary term operations} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Theorem~\ref{thm:relational-absorption}\newline\emph{Relational description of absorption, Barto--Kazda \cite{BartoKazda}} & Proposition~\ref{prop:absorption-blocks}, Definition~\ref{def:absorption}, Lemma~\ref{lem:clo-subuniverse}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups} and Lemma~\ref{lem:preservation} \\
@@ -1442,10 +1468,11 @@ Theorem~\ref{thm:center-central}\newline\emph{Zhuk: centrality of the left cente
 Definition~\ref{def:central-absorption}\newline\emph{Central absorption} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Corollary~\ref{cor:zhuk-center}\newline\emph{Zhuk's center theorem} & Definition~\ref{def:central-absorption}, Theorem~\ref{thm:center-absorbs}, Lemma~\ref{lem:generation} and Theorem~\ref{thm:center-central} \\
 Lemma~\ref{lem:doubling}\newline\emph{Zhuk--Kozik essential doubling} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-nonempty}, Lemma~\ref{lem:hom-image}, Lemma~\ref{lem:generation}, Lemma~\ref{lem:singleton} and Definition~\ref{def:central-absorption} \\
+Remark~\ref{rem:step3-shape}\newline\emph{The shape of Step 3} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Corollary~\ref{cor:central-ternary}\newline\emph{Central absorption is witnessed by a ternary term} & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:central-absorption}, Corollary~\ref{cor:unbounded-no-absorption} and Lemma~\ref{lem:doubling} \\
 Remark~\ref{rem:arities}\newline\emph{The arities produced} & Lemma~\ref{lem:doubling} and Corollary~\ref{cor:central-ternary} \\
 Remark~\ref{rem:not-proved}\newline\emph{What is \emph{not} proved here} & Corollary~\ref{cor:central-ternary} \\
-\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:substitution}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:taylor-binary}, Lemma~\ref{lem:essential-groups}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Lemma~\ref{lem:doubling}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Lemma~\ref{lem:preservation} and Proposition~\ref{prop:absorption-blocks} \\
+\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:substitution}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups}, Lemma~\ref{lem:doubling}, Lemma~\ref{lem:taylor-binary}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Lemma~\ref{lem:preservation} and Proposition~\ref{prop:absorption-blocks} \\
 \end{longtable}
 
 \section{Suggested module order}\label{app:module-order}
@@ -1493,10 +1520,14 @@ from its ambient libraries.
       $X\subsetneq Y$ then $|X|+1\le|Y|$. A nonempty set of natural numbers
       bounded above has a greatest element; a nonempty set of natural numbers
       has a least element.
-\item \textbf{Arithmetic of $\min$.} For natural numbers,
-      $\min(N,\min(N,x)+1)=\min(N,x+1)$, and $\min$ is monotone in its second
-      argument, so $x\le y$ implies $\min(N,x+1)\le\min(N,y+1)$. Both are used,
-      in that order, in the induction of Theorem~\ref{thm:center-absorbs}.
+\item \textbf{Arithmetic of $\min$.} For natural numbers, $\min$ is monotone
+      in its second argument, so $x\le y$ implies
+      $\min(N,x+1)\le\min(N,y+1)$; and
+      $\min(N,\min(N,x)+1)=\min(N,x+1)$. The induction of
+      Theorem~\ref{thm:center-absorbs} uses them in that order: monotonicity
+      first, to push the inductive bound on $|d_j+R|$ through
+      $\min(N,\,\cdot+1)$, and the identity second, to collapse the resulting
+      nested $\min$.
 \item \textbf{Induction.} Structural induction on an inductively defined type
       of terms; strong induction on the natural numbers.
 \item \textbf{Products and functions.} Indexed products of sets, tuples and
