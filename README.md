@@ -30,7 +30,7 @@ absorption yields the *existence* of a ternary witness.
 
 | File | Pages | What it is |
 | --- | --- | --- |
-| [`zhuk_centers.tex`](zhuk_centers.tex) | 23 | The proof, written at formalization granularity, with a statement-level citation index, a suggested module order, an explicit imported-background appendix, and a concordance with the source. |
+| [`zhuk_centers.tex`](zhuk_centers.tex) | 24 | The proof, written at formalization granularity, with a statement-level citation index, a suggested module order, an explicit imported-background appendix, and a concordance with the source. |
 
 The compiled PDF is committed alongside the source.
 
@@ -111,11 +111,12 @@ suggested module order) is coarser and is maintained by hand.
 
 ## Status
 
-Third draft, after two rounds of review. Both rounds confirmed the central
+Fourth draft, after three rounds of review. Every round confirmed the central
 mathematics, including the two arguments the first draft flagged as riskiest —
-the block-regrouping induction (Lemma 3.6) and the minimality argument in the
+the block-regrouping induction (Lemma 3.7) and the minimality argument in the
 doubling trick (Step 1 of Lemma 7.1). The defects found were all in the
-foundations and in quantifier discipline, and are repaired:
+foundations, in quantifier discipline, and in type-level transport, and are
+repaired:
 
 - **Term substitution was missing.** The first draft defined only variable
   renaming along a bijection, which covers none of the three constructions that
@@ -128,9 +129,12 @@ foundations and in quantifier discipline, and are repaired:
   content is not vacuous. Theorems 5.1 and 5.2 are now stated over tuples
   constrained coordinatewise, matching the absorption definition, so the
   degenerate case dissolves rather than needing a detour.
-- **Products are indexed by arbitrary sets.** Theorem 3.9 forms `A^(A^m)` and
-  projects onto a subset of `A^m`, which the old ordered-product form of the
-  relational-constructions lemma did not cover.
+- **Products are indexed by arbitrary finite sets, with explicit transport.**
+  Theorem 3.10 forms `A^(A^m)` and projects onto a subset `X ⊆ A^m`, which the
+  old ordered-product form did not cover; and `A^X` is only *isomorphic* to the
+  grouped product `∏_j A^(X_j)`, so Lemma 1.19 now supplies the block-respecting
+  enumeration and the transport across it. Index sets are kept finite so the
+  foundational boundary stays at finite choice.
 - Attribution corrected (Barto–Kazda for Part II), the concordance qualified
   where this document proves something weaker than the source, and the
   cross-reference index no longer claims to be a dependency graph.

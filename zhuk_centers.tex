@@ -259,8 +259,9 @@ $f^{\bA}(a,\dots,a)=a$ by Definition~\ref{def:idempotent}.
 \end{proof}
 
 \begin{definition}[Products]\label{def:product}
-Given a family of algebras $(\bA_i)_{i\in I}$ indexed by a set $I$, the product
-algebra $\prod_{i\in I}\bA_i$ has universe $\prod_{i\in I}A_i$ and operations
+Given a family of algebras $(\bA_i)_{i\in I}$ indexed by a \emph{finite} set
+$I$, the product algebra $\prod_{i\in I}\bA_i$ has universe
+$\prod_{i\in I}A_i$ and operations
 applied coordinatewise. A \emph{relation} is a subuniverse
 $R\le\prod_{i\in I}\bA_i$; when $I=[m]$ we write
 $\bA_1\times\cdots\times\bA_m$ and call $m$ the \emph{arity}. We write $\bA^m$
@@ -268,10 +269,15 @@ for the $m$-fold product of $\bA$ with itself, and $\bA^{X}$ for the product of
 copies of $\bA$ indexed by a set $X$, whose universe is the set of functions
 $X\to A$.
 
-The index set is deliberately arbitrary: Theorem~\ref{thm:relational-absorption}
-forms $\bA^{A^m}$ and projects it onto a subset of $A^m$, so the constructions of
-Lemma~\ref{lem:pp} must be available for index sets that are not initial
-segments of the naturals.
+The index set is deliberately allowed to be an arbitrary finite set rather than
+an initial segment $[m]$: Theorem~\ref{thm:relational-absorption} forms
+$\bA^{A^m}$ and projects it onto a subset of $A^m$. Finiteness is retained
+because a product of nonempty universes over an infinite index set is nonempty
+only by a choice principle, and every index set used below is finite ---
+$A^{m}$ and its subsets because $A$ is finite, and the products of
+Lemma~\ref{lem:doubling} because they have finitely many factors. Keeping $I$
+finite therefore holds the foundational boundary of
+\hyperref[app:background]{Appendix~C} at finite choice.
 \end{definition}
 
 \begin{definition}[Terms]\label{def:term}
@@ -421,7 +427,7 @@ $\{t^{\bB}(h(s_1),\dots,h(s_N)):t\in\Tm(N)\}$, the left-hand side by (b).
 \end{proof}
 
 \begin{lemma}[Relational constructions]\label{lem:pp}
-Let $(\bA_i)_{i\in I}$ be a family of algebras indexed by a set $I$.
+Let $(\bA_i)_{i\in I}$ be a family of algebras indexed by a finite set $I$.
 \begin{enumerate}\alphlabels\tightlist
 \item If $R,R'\le\prod_{i\in I}\bA_i$ then $R\cap R'\le\prod_{i\in I}\bA_i$.
 \item If $R\le\prod_{i\in I}\bA_i$ and $S_i\le\bA_i$ for each $i$, then
@@ -439,23 +445,60 @@ Let $(\bA_i)_{i\in I}$ be a family of algebras indexed by a set $I$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(a) is Lemma~\ref{lem:generation}(a). (b) The box $S_1\times\cdots\times S_m$ is
-a subuniverse because operations act coordinatewise, so (a) applies. (c) is
+(a) is Lemma~\ref{lem:generation}(a). (b) The box $\prod_{i\in I}S_i$ is a
+subuniverse because operations act coordinatewise, so (a) applies. (c) is
 Lemma~\ref{lem:hom-image}(a) applied to the projection homomorphism. (d) If
 $h(a_r)\in S$ for $r\in[k]$ then
 $h(f^{\bA}(a_1,\dots,a_k))=f^{\bB}(h(a_1),\dots,h(a_k))\in S$. (e) The map is a
 bijection commuting with coordinatewise operations, so
-Lemma~\ref{lem:hom-image}(a) applies. Nothing in (a)--(e) uses finiteness of
-$I$ or an ordering of it.
+Lemma~\ref{lem:hom-image}(a) applies. Nothing in (a)--(e) uses an ordering of
+$I$.
+\end{proof}
+
+\begin{lemma}[Grouping and enumeration]\label{lem:grouping}
+Let $\bA$ be an algebra, let $I$ be a finite set, and let
+$I=I_1\sqcup\cdots\sqcup I_m$ be a partition into nonempty blocks. Put
+$n_j:=|I_j|$, $n:=n_1+\cdots+n_m$, and let $\beta_j\subseteq[n]$ denote the
+$j$th consecutive block
+$\beta_j=\{n_1+\cdots+n_{j-1}+1,\dots,n_1+\cdots+n_j\}$. Then:
+\begin{enumerate}\alphlabels\tightlist
+\item There is a bijection $e:[n]\to I$ with $e(\beta_j)=I_j$ for every $j$.
+\item For any such $e$, the map $\Phi:A^{I}\to A^{n}$ defined by
+      $\Phi(x)_r:=x(e(r))$ is an isomorphism $\bA^{I}\to\bA^{n}$, and carries
+      subuniverses to subuniverses.
+\item For every $S\le\bA$ and every $j\in[m]$,
+      \[
+        \Phi\bigl(\{x\in A^{I}:x(i)\in S\text{ for all }i\in I\setminus I_j\}\bigr)
+        =\{\vec z\in A^{n}:z_r\in S\text{ for all }r\in[n]\setminus\beta_j\},
+      \]
+      and $\Phi(\{x\in A^{I}:x(i)\in S\text{ for all }i\in I\})=S^{n}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) Enumerate each $I_j$ as $i_{j,1},\dots,i_{j,n_j}$, which is possible because
+$I_j$ is finite and nonempty, and let $e$ send the $q$th element of $\beta_j$ to
+$i_{j,q}$. This is a bijection because the $\beta_j$ partition $[n]$ and the
+$I_j$ partition $I$.
+
+(b) $\Phi$ is the reindexing along the bijection $e$, so
+Lemma~\ref{lem:pp}(e) applies.
+
+(c) $\Phi$ only relabels coordinates: $z_r\in S$ holds for the image exactly
+when $x(e(r))\in S$ holds for the source. Since $e(\beta_j)=I_j$, we have
+$e([n]\setminus\beta_j)=I\setminus I_j$, which gives the first identity; taking
+all coordinates gives the second.
 \end{proof}
 
 \begin{remark}[The only relational constructions used]\label{rem:pp-usage}
-Parts (a)--(e) of Lemma~\ref{lem:pp} are all that is needed to see that the
-relations built in this document are subuniverses. They are used in exactly
-three places: the neighborhoods $a+R$ of Definition~\ref{def:neighborhood}, the
-grouped projections of Section~\ref{sec:essential}, and the doubled relation
-$R'$ of Lemma~\ref{lem:doubling}. No general theory of primitive positive
-definability is required.
+Parts (a)--(e) of Lemma~\ref{lem:pp}, together with the transport supplied by
+Lemma~\ref{lem:grouping}, are all that is needed to see that the relations
+built in this document are subuniverses and that they live in the products
+their statements claim. They are used in exactly four places: the neighborhoods
+$a+R$ of Definition~\ref{def:neighborhood}, the projections and reindexings in
+the regrouping Lemma~\ref{lem:essential-groups}, the passage from $\bA^{X}$ to
+an enumerated power in Theorem~\ref{thm:relational-absorption}, and the doubled
+relation $R'$ of Lemma~\ref{lem:doubling}. No general theory of primitive
+positive definability is required.
 \end{remark}
 
 \section{Absorption}\label{sec:absorption}
@@ -592,6 +635,20 @@ When all $\bA_i$ equal $\bA$ and all $S_i$ equal $S$, we say $R$ is
 $S$-\emph{essential of arity} $m$.
 \end{definition}
 
+\begin{definition}[Essential for a partition]\label{def:block-essential}
+Let $S\le\bA$, let $n\ge1$ and let $\mathcal P=(P_1,\dots,P_m)$ be a partition
+of $[n]$ into $m\ge1$ nonempty blocks. A relation $R\le\bA^{n}$ is
+$S$-\emph{essential for} $\mathcal P$ if
+\begin{align}
+ &R\cap\{\vec x\in A^{n}:x_r\in S\text{ for all }r\in[n]\setminus P_j\}\ne\varnothing
+ \quad\text{for every }j\in[m],\label{eq:B1}\\
+ &R\cap S^{n}=\varnothing.\label{eq:B2}
+\end{align}
+When every block is a singleton, so that $m=n$ and $P_j=\{j\}$, this is exactly
+$S$-essentiality of arity $n$ in the sense of
+Definition~\ref{def:essential}.
+\end{definition}
+
 \begin{lemma}[Essentiality forces nonemptiness]\label{lem:essential-nonempty}
 If $R\le\bA_1\times\cdots\times\bA_m$ is $(S_1,\dots,S_m)$-essential and
 $m\ge2$, then $S_i\ne\varnothing$ for every $i\in[m]$.
@@ -663,14 +720,10 @@ The converse of Proposition~\ref{prop:absorption-blocks} is the substantial
 result of this part. It goes through a grouped form of essentiality.
 
 \begin{lemma}[Regrouping]\label{lem:essential-groups}
-Let $S\le\bA$, let $m\ge1$ and $n_1,\dots,n_m\ge1$, and regard
-\[
- R\;\le\;\bA^{n_1}\times\cdots\times\bA^{n_m}
-\]
-as a relation of arity $n=n_1+\cdots+n_m$ whose coordinates are partitioned into
-$m$ consecutive blocks of sizes $n_1,\dots,n_m$. If $R$ is
-$(S^{n_1},\dots,S^{n_m})$-essential --- that is, essential for the block
-partition, with $S^{n_j}$ the box on block $j$ --- then there exists an
+Let $S\le\bA$, let $m\ge1$ and $n_1,\dots,n_m\ge1$, put $n=n_1+\cdots+n_m$, and
+let $\mathcal P$ be the partition of $[n]$ into the $m$ consecutive blocks of
+sizes $n_1,\dots,n_m$. If $R\le\bA^{n}$ is $S$-essential for $\mathcal P$ in
+the sense of Definition~\ref{def:block-essential}, then there exists an
 $S$-essential relation of arity $m$.
 \end{lemma}
 \begin{proof}
@@ -678,58 +731,61 @@ By strong induction on the total arity $n=n_1+\cdots+n_m$, with the number of
 blocks $m$ held fixed. Each recursive call below is to a relation with the same
 number $m$ of blocks, all of them still of size at least $1$, and with strictly
 smaller total arity; these are the only facts about the measure that are used.
+Write $P_1,\dots,P_m$ for the consecutive blocks of $\mathcal P$.
 
-If $n_1=\cdots=n_m=1$ then $n=m$ and $R$ is itself an $S$-essential relation of
-arity $m$.
+If $n_1=\cdots=n_m=1$ then $n=m$, every block is a singleton, and $R$ is
+already an $S$-essential relation of arity $m$ by the last sentence of
+Definition~\ref{def:block-essential}.
 
-Otherwise some $n_j>1$. Permuting the blocks permutes the coordinates by a
-block permutation, which by Lemma~\ref{lem:pp}(e) carries $R$ to a subuniverse
-of the correspondingly permuted product, and permutes the two essentiality
-conditions among themselves; so we may assume $n_m>1$. Write
-$n_{<m}=n_1+\cdots+n_{m-1}$, so $n=n_{<m}+n_m$ and the coordinates of the last
-block are $n_{<m}+1,\dots,n$.
+Otherwise some $n_j>1$. Reordering the blocks is a reindexing of $[n]$ that
+carries consecutive blocks to consecutive blocks; by Lemma~\ref{lem:pp}(e) it
+carries $R$ to a subuniverse of $\bA^{n}$, and it permutes the conditions
+\eqref{eq:B1} among themselves while preserving \eqref{eq:B2}. So we may assume
+$n_m>1$. Write $n_{<m}=n_1+\cdots+n_{m-1}$, so that $n=n_{<m}+n_m$ and
+$P_m=\{n_{<m}+1,\dots,n\}$.
 
 Consider
 \[
- R_1:=\pi_{[n-1]}\bigl(R\cap(A^{n-1}\times S)\bigr)
- \;\le\;\bA^{n_1}\times\cdots\times\bA^{n_{m-1}}\times\bA^{n_m-1},
+ R_1:=\pi_{[n-1]}\bigl(R\cap(A^{n-1}\times S)\bigr)\;\le\;\bA^{\,n-1},
 \]
-a relation of arity $n-1$ with block sizes $n_1,\dots,n_{m-1},n_m-1$, all
-$\ge1$. It is a subuniverse by Lemma~\ref{lem:pp}(b),(c). We check the two
-essentiality conditions for these blocks.
+a subuniverse by Lemma~\ref{lem:pp}(b),(c), and let $\mathcal P'$ be the
+partition of $[n-1]$ into consecutive blocks of sizes
+$n_1,\dots,n_{m-1},n_m-1$, all $\ge1$. We test $R_1$ against $\mathcal P'$.
 
-\emph{Condition \eqref{eq:E2}.} If $\vec y\in R_1$ has all coordinates in $S$
-then $\vec y=\pi_{[n-1]}(\vec x)$ with $\vec x\in R$ and $x_n\in S$, so
-$\vec x\in R\cap S^n$, contradicting \eqref{eq:E2} for $R$.
+\emph{Condition \eqref{eq:B2}.} If $\vec y\in R_1\cap S^{n-1}$ then
+$\vec y=\pi_{[n-1]}(\vec x)$ with $\vec x\in R$ and $x_n\in S$, so
+$\vec x\in R\cap S^{n}$, contradicting \eqref{eq:B2} for $R$.
 
-\emph{Condition \eqref{eq:E1} for blocks $j\le m-1$.} The witness $\vec x\in R$
-for block $j$ has all coordinates outside block $j$ in $S$; in particular
-$x_n\in S$, so $\vec x\in R\cap(A^{n-1}\times S)$, and $\pi_{[n-1]}(\vec x)$ is
-a witness for block $j$ in $R_1$.
+\emph{Condition \eqref{eq:B1} for blocks $j\le m-1$.} The witness $\vec x\in R$
+for $P_j$ has every coordinate outside $P_j$ in $S$; in particular $x_n\in S$,
+since $n\in P_m$. Hence $\vec x\in R\cap(A^{n-1}\times S)$, and
+$\pi_{[n-1]}(\vec x)$ witnesses \eqref{eq:B1} for the $j$th block of
+$\mathcal P'$.
 
-\emph{Condition \eqref{eq:E1} for the last block.} This asks for
-$\vec x\in R$ with $x_1,\dots,x_{n_{<m}}\in S$ and $x_n\in S$, the remaining
-coordinates $x_{n_{<m}+1},\dots,x_{n-1}$ unconstrained; equivalently, it asks
-that
+\emph{Condition \eqref{eq:B1} for the last block of $\mathcal P'$.} This asks
+for $\vec x\in R$ with $x_1,\dots,x_{n_{<m}}\in S$ and $x_n\in S$, the
+coordinates $x_{n_{<m}+1},\dots,x_{n-1}$ unconstrained; equivalently, writing
+$J:=[n_{<m}]\cup\{n\}$, it asks that
 \[
- \pi_{[n_{<m}]\cup\{n\}}(R)\cap S^{\,n_{<m}+1}\ne\varnothing. \tag{$\dagger$}
+ \pi_{J}(R)\cap S^{\,J}\ne\varnothing. \tag{$\dagger$}
 \]
 
-If $(\dagger)$ holds then $R_1$ is essential for its block partition, of arity
-$n-1<n$, and the inductive hypothesis applies.
+If $(\dagger)$ holds, then $R_1$ is $S$-essential for $\mathcal P'$, of total
+arity $n-1<n$, and the inductive hypothesis applies.
 
-If $(\dagger)$ fails, put
-\[
- R_2:=\pi_{[n_{<m}]\cup\{n\}}(R)\;\le\;\bA^{n_1}\times\cdots\times\bA^{n_{m-1}}\times\bA,
-\]
-a relation of arity $n_{<m}+1$ with block sizes $n_1,\dots,n_{m-1},1$, all
-$\ge1$; it is a subuniverse by Lemma~\ref{lem:pp}(c). Condition \eqref{eq:E2}
-for $R_2$ is precisely the failure of $(\dagger)$. For \eqref{eq:E1} with
-$j\le m-1$, project the witness of $R$ for block $j$: its coordinates outside
-block $j$ lie in $S$, in particular $x_n\in S$. For \eqref{eq:E1} on the last
-block, project the witness of $R$ for block $m$: its first $n_{<m}$ coordinates
-lie in $S$, and its $n$th coordinate is unconstrained. Since $n_m>1$ we have
-$n_{<m}+1<n$, so the inductive hypothesis applies to $R_2$.
+If $(\dagger)$ fails, put $R_2':=\pi_{J}(R)\le\bA^{J}$, a subuniverse by
+Lemma~\ref{lem:pp}(c), and let $R_2\le\bA^{\,n_{<m}+1}$ be its image under the
+reindexing along the order-preserving bijection $J\to[n_{<m}+1]$, which fixes
+$1,\dots,n_{<m}$ and sends $n$ to $n_{<m}+1$; this is an isomorphism by
+Lemma~\ref{lem:pp}(e). Let $\mathcal P''$ be the partition of $[n_{<m}+1]$ into
+consecutive blocks of sizes $n_1,\dots,n_{m-1},1$, all $\ge1$. Condition
+\eqref{eq:B2} for $R_2$ is precisely the failure of $(\dagger)$. For
+\eqref{eq:B1} at a block $j\le m-1$, project the witness of $R$ for $P_j$: its
+coordinates outside $P_j$ lie in $S$, in particular the coordinate $n$. For
+\eqref{eq:B1} at the last block $\{n_{<m}+1\}$, project the witness of $R$ for
+$P_m$: its first $n_{<m}$ coordinates lie in $S$ and its coordinate $n$ is
+unconstrained. Since $n_m>1$ we have $n_{<m}+1<n$, so the inductive hypothesis
+applies to $R_2$.
 \end{proof}
 
 \begin{remark}[A weaker regrouping than the source's]\label{rem:regrouping-weaker}
@@ -747,8 +803,9 @@ Lemma~\ref{lem:pp} already records that these two operations suffice.
 \end{remark}
 
 \begin{lemma}[The algebra of $m$-ary term operations]\label{lem:clo-subuniverse}
-For every $m\ge1$, $\Clo_m(\bA)$ is a subuniverse of $\bA^{A^m}$ containing the
-$m$ coordinate projections $p_1,\dots,p_m:A^m\to A$.
+Let $\bA$ be finite, so that $A^m$ is a finite index set. For every $m\ge1$,
+$\Clo_m(\bA)$ is a subuniverse of $\bA^{A^m}$ containing the $m$ coordinate
+projections $p_1,\dots,p_m:A^m\to A$.
 \end{lemma}
 \begin{proof}
 $p_i=x_i^{\bA}\in\Clo_m(\bA)$. For $f\in\sigma$ of arity $k$ and
@@ -785,34 +842,46 @@ For $i\in[m]$ set
 \]
 Each $X_i$ is nonempty, since $S$ and $A\setminus S$ are nonempty. The $X_i$ are
 pairwise disjoint, because a tuple in $X_i\cap X_{i'}$ with $i\ne i'$ would have
-$x_i\in S$ and $x_i\notin S$. Put $X:=X_1\cup\cdots\cup X_m$ and
+$x_i\in S$ and $x_i\notin S$. Put $X:=X_1\cup\cdots\cup X_m$, a finite set
+because $A$ is finite, and
 \[
- R:=\pi_{X}\bigl(\Clo_m(\bA)\bigr)\;\le\;\bA^{X_1}\times\cdots\times\bA^{X_m},
+ \widetilde R:=\pi_{X}\bigl(\Clo_m(\bA)\bigr)\;\le\;\bA^{X},
 \]
-using Lemma~\ref{lem:clo-subuniverse} and Lemma~\ref{lem:pp}(c). Concretely, $R$
-is the set of restrictions $t^{\bA}\!\restriction_X$ for $t\in\Tm(m)$, and we
-regard it as a relation of arity $|X|$ with the $m$ blocks $X_1,\dots,X_m$, of
-sizes $n_i=|X_i|\ge1$.
+using Lemma~\ref{lem:clo-subuniverse} and Lemma~\ref{lem:pp}(c). Concretely,
+$\widetilde R$ is the set of restrictions $t^{\bA}\!\restriction_X$ for
+$t\in\Tm(m)$.
 
-\emph{Condition \eqref{eq:E1}.} Fix $i\in[m]$ and take $t=x_i$, so
+\emph{The blocks are populated.} Fix $i\in[m]$ and take $t=x_i$, so
 $t^{\bA}=p_i$. For $\vec x\in X_j$ with $j\ne i$ we have $x_i\in S$ by the
 definition of $X_j$, so $p_i(\vec x)\in S$. Hence
-$\pi_X(p_i)$ lies in $S^{X_1}\times\cdots\times A^{X_i}\times\cdots\times S^{X_m}$,
-witnessing \eqref{eq:E1} for block $i$.
+$p_i\!\restriction_X$ lies in
+$\{y\in A^{X}:y(\vec x)\in S\text{ for all }\vec x\in X\setminus X_i\}$, so
+$\widetilde R$ meets that set.
 
-Since no $S$-essential relation of arity $m$ exists, Lemma~\ref{lem:essential-groups}
-shows that $R$ is not $(S^{X_1},\dots,S^{X_m})$-essential. Condition
-\eqref{eq:E1} holds, so \eqref{eq:E2} must fail:
+\emph{Transport to an enumerated power.} The sets $X_1,\dots,X_m$ partition $X$
+into nonempty blocks, so Lemma~\ref{lem:grouping} supplies $n:=|X|$, a
+block-respecting bijection $e:[n]\to X$ and an isomorphism
+$\Phi:\bA^{X}\to\bA^{n}$. Put $R:=\Phi(\widetilde R)\le\bA^{n}$, and let
+$\mathcal P$ be the partition of $[n]$ into consecutive blocks of sizes
+$n_i:=|X_i|\ge1$. By Lemma~\ref{lem:grouping}(c), the previous paragraph says
+exactly that $R$ satisfies \eqref{eq:B1} for $\mathcal P$.
+
+\emph{The all-$S$ box is met.} If $R$ also satisfied \eqref{eq:B2}, it would be
+$S$-essential for $\mathcal P$, and Lemma~\ref{lem:essential-groups} would
+produce an $S$-essential relation of arity $m$, contrary to hypothesis. So
+$R\cap S^{n}\ne\varnothing$, and applying $\Phi^{-1}$ and
+Lemma~\ref{lem:grouping}(c) again,
 \[
- R\cap\bigl(S^{X_1}\times\cdots\times S^{X_m}\bigr)\ne\varnothing .
+ \widetilde R\cap\{y\in A^{X}:y(\vec x)\in S\text{ for all }\vec x\in X\}\ne\varnothing .
 \]
-Choose $t\in\Tm(m)$ whose restriction to $X$ witnesses this, so
+Choose $t\in\Tm(m)$ whose restriction to $X$ witnesses this, so that
 $t^{\bA}(\vec x)\in S$ for every $\vec x\in X$.
 
-Finally, $t$ witnesses $S\ab\bA$. Let $i\in[m]$, $a\in A$, $s_1,\dots,s_m\in S$
-and put $\vec x=(s_1,\dots,s_{i-1},a,s_{i+1},\dots,s_m)$. If $a\notin S$ then
-$\vec x\in X_i$ and $t^{\bA}(\vec x)\in S$ as just shown. If $a\in S$ then
-$\vec x\in S^m$ and $t^{\bA}(\vec x)\in S$ by Lemma~\ref{lem:preservation}.
+\emph{$t$ witnesses $S\ab\bA$.} Let $i\in[m]$ and let $\vec x\in A^m$ satisfy
+$x_j\in S$ for every $j\ne i$. If $x_i\notin S$ then $\vec x\in X_i\subseteq X$,
+so $t^{\bA}(\vec x)\in S$ as just shown. If $x_i\in S$ then $\vec x\in S^m$ and
+$t^{\bA}(\vec x)\in S$ by Lemma~\ref{lem:preservation}. This is precisely the
+condition of Definition~\ref{def:absorption}.
 \end{proof}
 
 \begin{corollary}[Unbounded arity defeats absorption]\label{cor:unbounded-no-absorption}
@@ -847,7 +916,8 @@ and define the \emph{left center} of $R$ to be
  C:=\{a\in A\;:\;a+R=B\}=\{a\in A: \{a\}\times B\subseteq R\}.
 \]
 The \emph{right center} of $R$ is the left center of
-$R^{-}=\{(b,a):(a,b)\in R\}$, a subuniverse of $\bB\times\bA$.
+$R^{-}=\{(b,a):(a,b)\in R\}$, which is a subuniverse of $\bB\times\bA$ by the
+reindexing part of Lemma~\ref{lem:pp}(e).
 \end{definition}
 
 \begin{lemma}[Basic properties]\label{lem:center-basic}
@@ -942,8 +1012,11 @@ by Lemma~\ref{lem:center-basic}(a) --- and with the Taylor identity for $t$ at
 $i$ over $B$ supplied by Definition~\ref{def:taylor}. It yields
 $a+R\abin\bB$. Now $a+R$ is nonempty by Lemma~\ref{lem:center-basic}(a), so by
 the hypothesis on $\bB$ and Convention~\ref{conv:subalgebra} it is not a proper
-subuniverse: $a+R=B$. Hence $a\in C$, so $a^{+}\in C$ by
-Lemma~\ref{lem:center-basic}(c), so $|a^{+}+R|=|B|\ge\min(|B|,|a+R|+1)$.
+subuniverse: $a+R=B$. Hence $a=z_i\in C$; since also $z_j\in C$ for $j\ne i$,
+every coordinate of $(z_1,\dots,z_k)$ lies in $C$, and $C\le\bA$ by
+Lemma~\ref{lem:center-basic}(c), so $a^{+}=t^{\bA}(z_1,\dots,z_k)\in C$ by
+Lemma~\ref{lem:preservation}. Therefore
+$|a^{+}+R|=|B|\ge\min(|B|,|a+R|+1)$.
 \end{proof}
 
 \begin{theorem}[Zhuk: the left center absorbs]\label{thm:center-absorbs}
@@ -1343,7 +1416,7 @@ Definition~\ref{def:subuniverse}\newline\emph{Subuniverse} & Definitions and imp
 Convention~\ref{conv:subalgebra}\newline\emph{Subalgebra means nonempty} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:generation}\newline\emph{Intersections and generation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:singleton}\newline\emph{Singletons} & Definition~\ref{def:idempotent} \\
-Definition~\ref{def:product}\newline\emph{Products} & Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:pp} \\
+Definition~\ref{def:product}\newline\emph{Products} & Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:doubling} \\
 Definition~\ref{def:term}\newline\emph{Terms} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Definition~\ref{def:substitution}\newline\emph{Simultaneous substitution} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:substitution-eval}\newline\emph{Evaluation of a substitution} & Definition~\ref{def:term} \\
@@ -1355,7 +1428,8 @@ Remark~\ref{rem:fixed-list}\newline\emph{Why a fixed list} & Remark~\ref{rem:sub
 Definition~\ref{def:hom}\newline\emph{Homomorphism} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:hom-image}\newline\emph{Images and generation} & Lemma~\ref{lem:sg-terms} \\
 Lemma~\ref{lem:pp}\newline\emph{Relational constructions} & Lemma~\ref{lem:generation} and Lemma~\ref{lem:hom-image} \\
-Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Definition~\ref{def:neighborhood} and Lemma~\ref{lem:doubling} \\
+Lemma~\ref{lem:grouping}\newline\emph{Grouping and enumeration} & Lemma~\ref{lem:pp} \\
+Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:grouping}, Definition~\ref{def:neighborhood}, Lemma~\ref{lem:essential-groups}, Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:doubling} \\
 Definition~\ref{def:absorption}\newline\emph{Absorption} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Remark~\ref{rem:absorption-quantifier}\newline\emph{The quantifier form matters} & Definition~\ref{def:absorption} and Theorem~\ref{thm:relational-absorption} \\
 Remark~\ref{rem:absorption-degenerate}\newline\emph{Empty and full} & Convention~\ref{conv:subalgebra} \\
@@ -1364,20 +1438,21 @@ Remark~\ref{rem:taylor-usual}\newline\emph{Relation to the usual definition} & D
 Lemma~\ref{lem:taylor-binary}\newline\emph{One-sided closure gives binary absorption} & Definition~\ref{def:absorption}, Definition~\ref{def:substitution} and Lemma~\ref{lem:substitution-eval} \\
 Definition~\ref{def:star}\newline\emph{Star powers} & Definition~\ref{def:substitution} and Lemma~\ref{lem:substitution-eval} \\
 Definition~\ref{def:essential}\newline\emph{Essential relation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:block-essential}\newline\emph{Essential for a partition} & Definition~\ref{def:essential} \\
 Lemma~\ref{lem:essential-nonempty}\newline\emph{Essentiality forces nonemptiness} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Proposition~\ref{prop:essential-down}\newline\emph{Passing to smaller arity} & Lemma~\ref{lem:pp} \\
 Proposition~\ref{prop:absorption-blocks}\newline\emph{Absorption forbids essential relations} & Lemma~\ref{lem:preservation} and Definition~\ref{def:absorption} \\
 Corollary~\ref{cor:absorption-bound}\newline\emph{Absorption bounds essential arity} & Proposition~\ref{prop:essential-down} and Proposition~\ref{prop:absorption-blocks} \\
-Lemma~\ref{lem:essential-groups}\newline\emph{Regrouping} & Lemma~\ref{lem:pp} \\
+Lemma~\ref{lem:essential-groups}\newline\emph{Regrouping} & Definition~\ref{def:block-essential} and Lemma~\ref{lem:pp} \\
 Remark~\ref{rem:regrouping-weaker}\newline\emph{A weaker regrouping than the source's} & Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:pp} \\
 Lemma~\ref{lem:clo-subuniverse}\newline\emph{The algebra of $m$-ary term operations} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
-Theorem~\ref{thm:relational-absorption}\newline\emph{Relational description of absorption, Barto--Kazda \cite{BartoKazda}} & Proposition~\ref{prop:absorption-blocks}, Definition~\ref{def:absorption}, Lemma~\ref{lem:clo-subuniverse}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups} and Lemma~\ref{lem:preservation} \\
+Theorem~\ref{thm:relational-absorption}\newline\emph{Relational description of absorption, Barto--Kazda \cite{BartoKazda}} & Proposition~\ref{prop:absorption-blocks}, Definition~\ref{def:absorption}, Lemma~\ref{lem:clo-subuniverse}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:grouping}, Lemma~\ref{lem:essential-groups} and Lemma~\ref{lem:preservation} \\
 Corollary~\ref{cor:unbounded-no-absorption}\newline\emph{Unbounded arity defeats absorption} & Corollary~\ref{cor:absorption-bound} \\
 Definition~\ref{def:subdirect}\newline\emph{Subdirect} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
-Definition~\ref{def:neighborhood}\newline\emph{Neighborhood and left center} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:neighborhood}\newline\emph{Neighborhood and left center} & Lemma~\ref{lem:pp} \\
 Lemma~\ref{lem:center-basic}\newline\emph{Basic properties} & Lemma~\ref{lem:singleton}, Lemma~\ref{lem:pp} and Lemma~\ref{lem:preservation} \\
 Remark~\ref{rem:degenerate-center}\newline\emph{Degenerate centers} & Remark~\ref{rem:absorption-quantifier}, Theorem~\ref{thm:center-absorbs}, Definition~\ref{def:absorption}, Remark~\ref{rem:induction-shape}, Lemma~\ref{lem:term-idempotent}, Theorem~\ref{thm:center-central} and Lemma~\ref{lem:generation} \\
-Theorem~\ref{thm:center-step}\newline\emph{One step towards the center} & Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:term-idempotent}, Lemma~\ref{lem:taylor-binary}, Definition~\ref{def:taylor} and Convention~\ref{conv:subalgebra} \\
+Theorem~\ref{thm:center-step}\newline\emph{One step towards the center} & Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:term-idempotent}, Lemma~\ref{lem:taylor-binary}, Definition~\ref{def:taylor}, Convention~\ref{conv:subalgebra} and Lemma~\ref{lem:preservation} \\
 Theorem~\ref{thm:center-absorbs}\newline\emph{Zhuk: the left center absorbs} & Definition~\ref{def:star}, Definition~\ref{def:absorption}, Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:preservation} and Theorem~\ref{thm:center-step} \\
 Remark~\ref{rem:induction-shape}\newline\emph{Why the tuple form matters here} & Definition~\ref{def:absorption} \\
 Theorem~\ref{thm:center-central}\newline\emph{Zhuk: centrality of the left center} & Lemma~\ref{lem:generation}, Lemma~\ref{lem:sg-terms}, Lemma~\ref{lem:preservation}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:center-basic} and Convention~\ref{conv:subalgebra} \\
@@ -1401,13 +1476,14 @@ organizing source files, is:
       singleton lemma;
 \item terms, term operations, simultaneous substitution and its evaluation law,
       preservation, and generation by a fixed list;
-\item homomorphisms, the compatibility of images with generation, and the
-      five relational constructions of Lemma~\ref{lem:pp}: intersection, box
-      intersection, projection, cylinder and reindexing;
+\item homomorphisms, the compatibility of images with generation, the five
+      relational constructions of Lemma~\ref{lem:pp} --- intersection, box
+      intersection, projection, cylinder and reindexing --- and the grouping
+      transport of Lemma~\ref{lem:grouping};
 \item absorption, binary absorption, Taylor identities, and
       Lemma~\ref{lem:taylor-binary};
-\item essential relations, arity reduction, and the block-regrouping
-      Lemma~\ref{lem:essential-groups};
+\item essential relations for a product and for a partition, arity reduction,
+      and the block-regrouping Lemma~\ref{lem:essential-groups};
 \item $\Clo_m(\bA)$ as a subuniverse of $\bA^{A^m}$, and the relational
       description of absorption;
 \item neighborhoods $a+R$, left centers, the enlargement step, star powers, and
