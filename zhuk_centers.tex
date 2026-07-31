@@ -303,69 +303,83 @@ finite therefore holds the foundational boundary of
 \end{definition}
 
 \begin{definition}[Terms]\label{def:term}
-For $n\ge1$ let $\Tm(n)$ be the set of $n$-ary \emph{terms}, defined
-inductively: the variables $x_1,\dots,x_n$ are $n$-ary terms, and if $f\in\sigma$
-has arity $k$ and $t_1,\dots,t_k\in\Tm(n)$ then $f(t_1,\dots,t_k)\in\Tm(n)$.
-For an algebra $\bA$, the \emph{term operation} $t^{\bA}:A^n\to A$ is defined by
-$x_i^{\bA}(a_1,\dots,a_n)=a_i$ and
+Let $V$ be a nonempty set, whose members we call \emph{variables}. The set
+$\Tm(V)$ of \emph{terms over $V$} is defined inductively: for each $v\in V$ the
+variable $x_v$ is a term, and if $f\in\sigma$ has arity $k$ and
+$t_1,\dots,t_k\in\Tm(V)$ then $f(t_1,\dots,t_k)\in\Tm(V)$. For an algebra
+$\bA$, the \emph{term operation} $t^{\bA}:A^{V}\to A$ is defined by
+$x_v^{\bA}(\vec a)=a_v$ and
 $f(t_1,\dots,t_k)^{\bA}(\vec a)=f^{\bA}\bigl(t_1^{\bA}(\vec a),\dots,t_k^{\bA}(\vec a)\bigr)$.
-We write $\Clo_n(\bA)=\{t^{\bA}:t\in\Tm(n)\}\subseteq A^{A^n}$.
+
+For $n\ge1$ we abbreviate $\Tm(n):=\Tm([n])$, write its variables as
+$x_1,\dots,x_n$, call its members \emph{$n$-ary}, and read $t^{\bA}$ as a map
+$A^n\to A$; we write $\Clo_n(\bA)=\{t^{\bA}:t\in\Tm(n)\}\subseteq A^{A^n}$.
+Nearly every term below is $n$-ary. The general variable set earns its place in
+exactly one construction, Definition~\ref{def:star}, where the natural index set
+for a star power is a set of \emph{functions} rather than an initial segment;
+see the remark following that definition.
 \end{definition}
 
 \begin{definition}[Simultaneous substitution]\label{def:substitution}
-For $t\in\Tm(m)$ and $u_1,\dots,u_m\in\Tm(n)$, the term
-$t[u_1,\dots,u_m]\in\Tm(n)$ is defined by structural recursion on $t$:
+Let $V,W$ be nonempty variable sets. For $t\in\Tm(V)$ and a family
+$u=(u_v)_{v\in V}$ with $u_v\in\Tm(W)$, the term $t[u]\in\Tm(W)$ is defined by
+structural recursion on $t$:
 \[
- x_i[u_1,\dots,u_m]:=u_i,\qquad
- f(t_1,\dots,t_k)[u_1,\dots,u_m]
-   :=f\bigl(t_1[u_1,\dots,u_m],\dots,t_k[u_1,\dots,u_m]\bigr).
+ x_v[u]:=u_v,\qquad
+ f(t_1,\dots,t_k)[u]:=f\bigl(t_1[u],\dots,t_k[u]\bigr).
 \]
-For an arbitrary map $\rho:[m]\to[n]$ we abbreviate
-$t[\rho]:=t[x_{\rho(1)},\dots,x_{\rho(m)}]\in\Tm(n)$. Nothing is required of
-$\rho$: permutation of variables, identification of variables and introduction
-of dummy variables are all covered, and the construction is single-valued
-because it substitutes \emph{into} variables rather than searching for
-preimages.
+When $V=[m]$ we write the family as a list and the term as
+$t[u_1,\dots,u_m]$. For an arbitrary map $\rho:V\to W$ we abbreviate
+$t[\rho]:=t[(x_{\rho(v)})_{v\in V}]\in\Tm(W)$. Nothing is required of $\rho$:
+permutation of variables, identification of variables and introduction of dummy
+variables are all covered, and the construction is single-valued because it
+substitutes \emph{into} variables rather than searching for preimages.
 \end{definition}
 
 \begin{lemma}[Evaluation of a substitution]\label{lem:substitution-eval}
-Let $t\in\Tm(m)$, $u_1,\dots,u_m\in\Tm(n)$, let $\bA$ be an algebra and let
-$\vec a\in A^n$. Then
+Let $t\in\Tm(V)$, let $u=(u_v)_{v\in V}$ with $u_v\in\Tm(W)$, let $\bA$ be an
+algebra and let $\vec a\in A^{W}$. Then
 \[
- \bigl(t[u_1,\dots,u_m]\bigr)^{\bA}(\vec a)
- = t^{\bA}\bigl(u_1^{\bA}(\vec a),\dots,u_m^{\bA}(\vec a)\bigr).
+ \bigl(t[u]\bigr)^{\bA}(\vec a)
+ = t^{\bA}\bigl(u^{\bA}(\vec a)\bigr),
+ \qquad\text{where } u^{\bA}(\vec a)\in A^{V}
+ \text{ is the tuple } v\mapsto u_v^{\bA}(\vec a).
 \]
-In particular, for $\rho:[m]\to[n]$,
+In particular, for $\rho:V\to W$,
+$\bigl(t[\rho]\bigr)^{\bA}(\vec a)=t^{\bA}(\vec a\circ\rho)$; with $V=[m]$ and
+$W=[n]$ this reads
 $\bigl(t[\rho]\bigr)^{\bA}(a_1,\dots,a_n)=t^{\bA}(a_{\rho(1)},\dots,a_{\rho(m)})$.
 \end{lemma}
 \begin{proof}
-Structural induction on $t$. If $t=x_i$, both sides equal $u_i^{\bA}(\vec a)$.
-If $t=f(t_1,\dots,t_k)$, then writing $\vec u$ for the list $u_1,\dots,u_m$ and
-$\vec u^{\bA}(\vec a)$ for the tuple $\bigl(u_1^{\bA}(\vec a),\dots,u_m^{\bA}(\vec a)\bigr)$,
-Definition~\ref{def:term} and the inductive hypothesis give
+Structural induction on $t$. If $t=x_v$, both sides equal $u_v^{\bA}(\vec a)$.
+If $t=f(t_1,\dots,t_k)$, then Definition~\ref{def:term} and the inductive
+hypothesis give
 \[
- \bigl(f(t_1,\dots,t_k)[\vec u]\bigr)^{\bA}(\vec a)
- = f^{\bA}\Bigl(\bigl(t_1[\vec u]\bigr)^{\bA}(\vec a),\dots\Bigr)
- = f^{\bA}\Bigl(t_1^{\bA}\bigl(\vec u^{\bA}(\vec a)\bigr),\dots\Bigr)
- = t^{\bA}\bigl(\vec u^{\bA}(\vec a)\bigr).
+ \bigl(f(t_1,\dots,t_k)[u]\bigr)^{\bA}(\vec a)
+ = f^{\bA}\Bigl(\bigl(t_1[u]\bigr)^{\bA}(\vec a),\dots\Bigr)
+ = f^{\bA}\Bigl(t_1^{\bA}\bigl(u^{\bA}(\vec a)\bigr),\dots\Bigr)
+ = t^{\bA}\bigl(u^{\bA}(\vec a)\bigr).
 \]
-The special case follows because $x_{\rho(i)}^{\bA}(\vec a)=a_{\rho(i)}$.
+The special case follows because $x_{\rho(v)}^{\bA}(\vec a)=a_{\rho(v)}$.
 \end{proof}
 
 \begin{remark}[Where substitution is used]\label{rem:substitution-usage}
-Definition~\ref{def:substitution} is not decoration: three constructions below
-are substitutions and none of them is a renaming along a bijection. The binary
-term of Lemma~\ref{lem:taylor-binary} is $t[\rho]$ for a map
-$\rho:[k]\to[2]$ that identifies variables; the star powers of
+Definition~\ref{def:substitution} is not decoration, and it is not merely
+renaming: the binary term of Lemma~\ref{lem:taylor-binary} is $t[\rho]$ for a
+map $\rho:[k]\to[2]$ that \emph{identifies} variables; the star powers of
 Definition~\ref{def:star} substitute terms into a term; and the binary term at
 the end of Theorem~\ref{thm:center-central} is $t[\rho]$ for a map
-$\rho:[n]\to[2]$. Substitution therefore belongs to the foundations of Part~I,
-not to the imported background of \hyperref[app:background]{Appendix~C}.
+$\rho:[n]\to[2]$. Renaming along a bijection is used once, in
+Lemma~\ref{lem:absorption-rename}, and only to convert a witness over an
+arbitrary finite variable set into one of numeric arity. Substitution therefore
+belongs to the foundations of Part~I, not to the imported background of
+\hyperref[app:background]{Appendix~C}.
 \end{remark}
 
 \begin{lemma}[Term operations are idempotent]\label{lem:term-idempotent}
-If $\bA$ is idempotent then $t^{\bA}(a,a,\dots,a)=a$ for every $t\in\Tm(n)$ and
-every $a\in A$.
+If $\bA$ is idempotent then $t^{\bA}(\vec a)=a$ for every nonempty variable set
+$V$, every $t\in\Tm(V)$ and every constant tuple $\vec a\in A^{V}$ with all
+coordinates equal to $a\in A$.
 \end{lemma}
 \begin{proof}
 Induction on $t$. For a variable the value is $a$. For $f(t_1,\dots,t_k)$ the
@@ -374,11 +388,12 @@ Definition~\ref{def:idempotent}.
 \end{proof}
 
 \begin{lemma}[Preservation]\label{lem:preservation}
-Let $S\le\bA$ and $t\in\Tm(n)$. Then $t^{\bA}(s_1,\dots,s_n)\in S$ for all
-$s_i\in S$.
+Let $S\le\bA$, let $V$ be a nonempty variable set and let $t\in\Tm(V)$. Then
+$t^{\bA}(\vec s)\in S$ for every $\vec s\in A^{V}$ with $s_v\in S$ for all
+$v\in V$.
 \end{lemma}
 \begin{proof}
-Induction on $t$. A variable returns one of the $s_i$. For $f(t_1,\dots,t_k)$,
+Induction on $t$. A variable returns one of the $s_v$. For $f(t_1,\dots,t_k)$,
 each $t_j^{\bA}(\vec s)\in S$ by the inductive hypothesis, and $S$ is closed
 under $f^{\bA}$ by Definition~\ref{def:subuniverse}.
 \end{proof}
@@ -504,15 +519,21 @@ Lemma~\ref{lem:doubling}.
 \section{Absorption}\label{sec:absorption}
 
 \begin{definition}[Absorption]\label{def:absorption}
-Let $\bA$ be an algebra and let $E\subseteq D$ be subuniverses of $\bA$. For
-$t\in\Tm(m)$ we say that $t$ \emph{witnesses} $E\ab D$ if for every $i\in[m]$,
+Let $\bA$ be an algebra, let $E\subseteq D$ be subuniverses of $\bA$ and let
+$V$ be a finite nonempty variable set. For $t\in\Tm(V)$ we say that $t$
+\emph{witnesses} $E\ab D$ if for every $i\in V$ and every $\vec z\in A^{V}$,
 \[
- t^{\bA}(z_1,\dots,z_m)\in E
+ t^{\bA}(\vec z)\in E
  \qquad\text{whenever } z_i\in D \text{ and } z_j\in E \text{ for all }j\ne i .
 \]
-We write $E\ab D$, and say $E$ \emph{absorbs} $D$, if some $t\in\Tm(m)$
-witnesses it for some $m\ge1$; and $E\abin D$, and say $E$ \emph{binary
-absorbs} $D$, if some $t\in\Tm(2)$ witnesses it, i.e.\ if
+For $V=[m]$ this reads: for every $i\in[m]$, $t^{\bA}(z_1,\dots,z_m)\in E$
+whenever $z_i\in D$ and $z_j\in E$ for all $j\ne i$.
+
+We write $E\ab D$, and say $E$ \emph{absorbs} $D$, if some $t\in\Tm(V)$
+witnesses it for some finite nonempty $V$ --- equivalently, by
+Lemma~\ref{lem:absorption-rename}, if some $t\in\Tm(m)$ witnesses it for some
+$m\ge1$. We write $E\abin D$, and say $E$ \emph{binary absorbs} $D$, if some
+$t\in\Tm(2)$ witnesses it, i.e.\ if
 $t^{\bA}(E\times D)\cup t^{\bA}(D\times E)\subseteq E$. When $D=A$ we also
 write $E\ab\bA$ and $E\abin\bA$.
 
@@ -521,6 +542,31 @@ condition mentions $t^{\bA}$ only at arguments lying in $D$, so it depends on
 $\bA$ only through the operations of $\bA$ restricted to $D$. No separate
 notion of ``the subalgebra on $D$'' is needed.
 \end{definition}
+
+The variable set is allowed to be an arbitrary finite set for the same reason
+the index set of a product is (Definition~\ref{def:product}): the terms
+constructed in Definition~\ref{def:star} are naturally indexed by a set of
+functions, and forcing them onto $[k^{\ell}]$ would require an explicit
+Euclidean-division bijection at every step of the induction in
+Theorem~\ref{thm:center-absorbs}. The following lemma is what makes the
+generality free --- it is used only to return to a numeric arity at the end.
+
+\begin{lemma}[Renaming the variable set]\label{lem:absorption-rename}
+Let $E\subseteq D$ be subuniverses of $\bA$, let $\beta:V\to W$ be a bijection
+of nonempty variable sets, and let $t\in\Tm(V)$ witness $E\ab D$. Then
+$t[\beta]\in\Tm(W)$ witnesses $E\ab D$. In particular, if $V$ is finite with
+$|V|=m$, then some term of $\Tm(m)$ witnesses $E\ab D$.
+\end{lemma}
+\begin{proof}
+Let $i\in W$ and let $\vec a\in A^{W}$ satisfy $a_i\in D$ and $a_j\in E$ for
+all $j\ne i$. By Lemma~\ref{lem:substitution-eval},
+$\bigl(t[\beta]\bigr)^{\bA}(\vec a)=t^{\bA}(\vec a\circ\beta)$. Put
+$i':=\beta^{-1}(i)$. Then $(\vec a\circ\beta)_{i'}=a_i\in D$, and for every
+$j'\ne i'$ we have $\beta(j')\ne i$, so $(\vec a\circ\beta)_{j'}\in E$. Since
+$t$ witnesses $E\ab D$, taken at the coordinate $i'$, the value lies in $E$.
+The last sentence is this applied to any bijection $\beta:V\to[m]$, which
+exists because $V$ is finite and nonempty.
+\end{proof}
 
 \begin{remark}[The quantifier form matters]\label{rem:absorption-quantifier}
 Definition~\ref{def:absorption} constrains the tuple $(z_1,\dots,z_m)$ rather
@@ -603,24 +649,53 @@ $D$. By (b), $f^{\bA}(d,e)\in E$.
 \end{proof}
 
 \begin{definition}[Star powers]\label{def:star}
-Let $t\in\Tm(k)$ with $k\ge1$. For $\ell\ge0$ and $j\in[k]$ let
-$\rho^{\ell}_j:[k^{\ell}]\to[k^{\ell+1}]$ be the \emph{block inclusion}
-$\rho^{\ell}_j(q)=(j-1)k^{\ell}+q$. Define $t^{*0}:=x_1\in\Tm(1)$ and, for
+Let $t\in\Tm(k)$ with $k\ge1$. For $\ell\ge0$ put
+\[
+ V_{\ell}:=[k]^{[\ell]}=\{\,\text{functions }[\ell]\to[k]\,\},
+\]
+a finite nonempty set with $|V_{\ell}|=k^{\ell}$; $V_0$ is the one-element set
+containing the empty function. For $j\in[k]$ let
+$\rho^{\ell}_j:V_{\ell}\to V_{\ell+1}$ be the \emph{block inclusion} that
+prepends $j$:
+\[
+ \rho^{\ell}_j(q):=j\frown q,\qquad
+ (j\frown q)(1)=j,\quad (j\frown q)(r+1)=q(r)\ \text{ for }r\in[\ell].
+\]
+Define $t^{*0}:=x_{\varnothing}\in\Tm(V_0)$, the unique variable, and, for
 $\ell\ge0$,
 \[
  t^{*(\ell+1)}:=t\bigl[\,t^{*\ell}[\rho^{\ell}_1],\;\dots,\;t^{*\ell}[\rho^{\ell}_k]\,\bigr]
- \;\in\;\Tm\bigl(k^{\ell+1}\bigr),
+ \;\in\;\Tm\bigl(V_{\ell+1}\bigr),
 \]
 a substitution in the sense of Definition~\ref{def:substitution}. Every
-$p\in[k^{\ell+1}]$ is uniquely $p=(j-1)k^{\ell}+q$ with $j\in[k]$ and
-$q\in[k^{\ell}]$; we call $j$ the \emph{block} of $p$ and $q$ its
-\emph{position in the block}. By Lemma~\ref{lem:substitution-eval},
+$p\in V_{\ell+1}$ is uniquely $p=j\frown q$, with $j:=p(1)\in[k]$ and
+$q\in V_{\ell}$ given by $q(r):=p(r+1)$ for $r\in[\ell]$; we call $j$ the
+\emph{block} of $p$ and $q$ its \emph{position in the block}. Each
+$\rho^{\ell}_j$ is injective, and $\rho^{\ell}_j$ and $\rho^{\ell}_{j'}$ have
+disjoint images for $j\ne j'$, since the block can be read back off as $p(1)$.
+By Lemma~\ref{lem:substitution-eval},
+for $\vec a\in A^{V_{\ell+1}}$,
 \[
- \bigl(t^{*(\ell+1)}\bigr)^{\bA}(a_1,\dots,a_{k^{\ell+1}})
+ \bigl(t^{*(\ell+1)}\bigr)^{\bA}(\vec a)
  = t^{\bA}\bigl(d_1,\dots,d_k\bigr),\qquad
- d_j=\bigl(t^{*\ell}\bigr)^{\bA}\bigl(a_{(j-1)k^{\ell}+1},\dots,a_{jk^{\ell}}\bigr).
+ d_j=\bigl(t^{*\ell}\bigr)^{\bA}\bigl(\vec a\circ\rho^{\ell}_j\bigr).
 \]
 \end{definition}
+
+\begin{remark}[Why the variables are functions]\label{rem:star-indexing}
+Indexing the variables of $t^{*\ell}$ by $[k^{\ell}]$ instead would make the
+block decomposition an instance of Euclidean division: $p=(j-1)k^{\ell}+q$ with
+$j\in[k]$, $q\in[k^{\ell}]$, together with the uniqueness of that
+decomposition. Indexing them by $V_{\ell}=[k]^{[\ell]}$ replaces division by
+reading off the first argument of a function, and the uniqueness of the
+decomposition becomes the statement that a function on $[\ell+1]$ is determined
+by its value at $1$ and its restriction to the rest. Nothing downstream needs
+the numeric arity $k^{\ell}$: Theorem~\ref{thm:center-absorbs} concludes that
+$t^{*\ell}$ witnesses $C\ab\bA$ in the sense of
+Definition~\ref{def:absorption}, and Lemma~\ref{lem:absorption-rename} converts
+that to a witness of numeric arity wherever one is wanted. This costs the
+manuscript one lemma and saves it an imported divisibility fact.
+\end{remark}
 
 \part{Essential relations and the arity of absorption}
 \label{part:essential}
@@ -1015,27 +1090,31 @@ $C\ab\bA$.
 \begin{proof}
 We prove by induction on $\ell\ge0$ the following statement, whose quantifier
 shape is deliberately the one used in Definition~\ref{def:absorption}: for
-every $p\in[k^{\ell}]$ and all $z_1,\dots,z_{k^{\ell}}$ with $z_p\in A$ and
+every $p\in V_{\ell}$ and every $\vec z\in A^{V_{\ell}}$ with $z_p\in A$ and
 $z_r\in C$ for $r\ne p$,
 \[
- \bigl|\,\bigl(t^{*\ell}\bigr)^{\bA}(z_1,\dots,z_{k^{\ell}})+R\,\bigr|
+ \bigl|\,\bigl(t^{*\ell}\bigr)^{\bA}(\vec z)+R\,\bigr|
  \;\ge\;\min\bigl(|B|,\;|z_p+R|+\ell\bigr).
  \tag{$\ast_\ell$}
 \]
 
-For $\ell=0$ we have $k^{0}=1$, so $p=1$, the tuple is the single element
-$z_1\in A$ subject to no further constraint, and the term is $x_1$; thus
-($\ast_0$) reads $|z_1+R|\ge\min(|B|,|z_1+R|)$, which is trivially true.
+For $\ell=0$ the set $V_0$ is a single point, so $p$ is that point, the tuple is
+the single element $z_p\in A$ subject to no further constraint, and the term is
+the variable $x_p$; thus ($\ast_0$) reads $|z_p+R|\ge\min(|B|,|z_p+R|)$, which
+is trivially true.
 
-Assume ($\ast_\ell$). Let $p\in[k^{\ell+1}]$ and let $z_1,\dots,z_{k^{\ell+1}}$
-satisfy $z_p\in A$ and $z_r\in C$ for $r\ne p$. Write $p=(j-1)k^{\ell}+q$ with
-$j\in[k]$, $q\in[k^{\ell}]$ as in Definition~\ref{def:star}, so that
+Assume ($\ast_\ell$). Let $p\in V_{\ell+1}$ and let $\vec z\in A^{V_{\ell+1}}$
+satisfy $z_p\in A$ and $z_r\in C$ for $r\ne p$. Write $p=j\frown q$ with
+$j=p(1)\in[k]$ and $q\in V_{\ell}$ as in Definition~\ref{def:star}, so that
 \[
- \bigl(t^{*(\ell+1)}\bigr)^{\bA}(z_1,\dots,z_{k^{\ell+1}})
+ \bigl(t^{*(\ell+1)}\bigr)^{\bA}(\vec z)
  = t^{\bA}(d_1,\dots,d_k),\qquad
- d_{j'}=\bigl(t^{*\ell}\bigr)^{\bA}\bigl(z_{\rho^{\ell}_{j'}(1)},\dots,z_{\rho^{\ell}_{j'}(k^{\ell})}\bigr).
+ d_{j'}=\bigl(t^{*\ell}\bigr)^{\bA}\bigl(\vec z\circ\rho^{\ell}_{j'}\bigr).
 \]
-Block $j$ carries $z_p$ at position $q$ and elements of $C$ elsewhere, so
+Block $j$ carries $z_p$ at position $q$ and elements of $C$ elsewhere: indeed
+$\rho^{\ell}_j(q)=p$, while $\rho^{\ell}_{j}(q')\ne p$ for $q'\ne q$ and
+$\rho^{\ell}_{j'}(q')\ne p$ for every $j'\ne j$, the block inclusions being
+injective with disjoint images (Definition~\ref{def:star}). So
 ($\ast_\ell$) gives $|d_j+R|\ge\min(|B|,|z_p+R|+\ell)$. Each block $j'\ne j$
 carries elements of $C$ only, so $d_{j'}\in C$ by
 Lemma~\ref{lem:center-basic}(c) and Lemma~\ref{lem:preservation}. The tuple
@@ -1056,11 +1135,11 @@ the first step by monotonicity of $\min$ in its second argument and the second
 by the identity $\min(N,\min(N,x)+1)=\min(N,x+1)$, both recorded in
 \hyperref[app:background]{Appendix~C}. This is ($\ast_{\ell+1}$).
 
-Now take $\ell=|B|-1$, let $p\in[k^{\ell}]$ and let $z_1,\dots,z_{k^{\ell}}$
+Now take $\ell=|B|-1$, let $p\in V_{\ell}$ and let $\vec z\in A^{V_{\ell}}$
 satisfy $z_p\in A$ and $z_r\in C$ for $r\ne p$. Since $|z_p+R|\ge1$ by
 Lemma~\ref{lem:center-basic}(a), ($\ast_\ell$) gives
 \[
- \bigl|\bigl(t^{*\ell}\bigr)^{\bA}(z_1,\dots,z_{k^{\ell}})+R\bigr|
+ \bigl|\bigl(t^{*\ell}\bigr)^{\bA}(\vec z)+R\bigr|
  \ \ge\ \min\bigl(|B|,\,1+|B|-1\bigr)=|B|,
 \]
 so the value lies in $C$ by Lemma~\ref{lem:center-basic}(b). This is precisely
@@ -1069,7 +1148,7 @@ $t^{*\ell}$ witnesses $C\ab\bA$.
 \end{proof}
 
 \begin{remark}[Why the tuple form matters here]\label{rem:induction-shape}
-Stating ($\ast_\ell$) as ``for all $c_1,\dots,c_{k^{\ell}}\in C$, replacing
+Stating ($\ast_\ell$) as ``for all $\vec c\in C^{V_{\ell}}$, replacing
 $c_p$ by an arbitrary $a\in A$\dots'' would make the induction unusable when
 $C=\varnothing$: at $\ell=0$ the hypothesis would quantify over an empty set
 while the conclusion mentions only $a$, and the final step would then have to
@@ -1454,10 +1533,10 @@ Convention~\ref{conv:subalgebra}\newline\emph{Subalgebra means nonempty} & Defin
 Lemma~\ref{lem:generation}\newline\emph{Intersections and generation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:singleton}\newline\emph{Singletons} & Definition~\ref{def:idempotent} \\
 Definition~\ref{def:product}\newline\emph{Products} & Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:doubling} \\
-Definition~\ref{def:term}\newline\emph{Terms} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:term}\newline\emph{Terms} & Definition~\ref{def:star} \\
 Definition~\ref{def:substitution}\newline\emph{Simultaneous substitution} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:substitution-eval}\newline\emph{Evaluation of a substitution} & Definition~\ref{def:term} \\
-Remark~\ref{rem:substitution-usage}\newline\emph{Where substitution is used} & Definition~\ref{def:substitution}, Lemma~\ref{lem:taylor-binary}, Definition~\ref{def:star} and Theorem~\ref{thm:center-central} \\
+Remark~\ref{rem:substitution-usage}\newline\emph{Where substitution is used} & Definition~\ref{def:substitution}, Lemma~\ref{lem:taylor-binary}, Definition~\ref{def:star}, Theorem~\ref{thm:center-central} and Lemma~\ref{lem:absorption-rename} \\
 Lemma~\ref{lem:term-idempotent}\newline\emph{Term operations are idempotent} & Definition~\ref{def:idempotent} \\
 Lemma~\ref{lem:preservation}\newline\emph{Preservation} & Definition~\ref{def:subuniverse} \\
 Lemma~\ref{lem:sg-terms}\newline\emph{Generation by a fixed list} & Lemma~\ref{lem:preservation} and Lemma~\ref{lem:generation} \\
@@ -1467,13 +1546,15 @@ Lemma~\ref{lem:hom-image}\newline\emph{Images and generation} & Lemma~\ref{lem:s
 Lemma~\ref{lem:pp}\newline\emph{Relational constructions} & Lemma~\ref{lem:generation} and Lemma~\ref{lem:hom-image} \\
 Lemma~\ref{lem:block-enumeration}\newline\emph{Block-respecting enumeration} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:doubling} and Lemma~\ref{lem:essential-groups} \\
-Definition~\ref{def:absorption}\newline\emph{Absorption} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:absorption}\newline\emph{Absorption} & Lemma~\ref{lem:absorption-rename} \\
+Lemma~\ref{lem:absorption-rename}\newline\emph{Renaming the variable set} & Lemma~\ref{lem:substitution-eval} \\
 Remark~\ref{rem:absorption-quantifier}\newline\emph{The quantifier form matters} & Definition~\ref{def:absorption}, Theorem~\ref{thm:relational-absorption} and Convention~\ref{conv:standing} \\
 Remark~\ref{rem:absorption-degenerate}\newline\emph{Empty and full} & Convention~\ref{conv:subalgebra} \\
 Definition~\ref{def:taylor}\newline\emph{Taylor identities} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Remark~\ref{rem:taylor-usual}\newline\emph{Relation to the usual definition} & Definition~\ref{def:taylor} and Theorem~\ref{thm:center-step} \\
 Lemma~\ref{lem:taylor-binary}\newline\emph{One-sided closure gives binary absorption} & Definition~\ref{def:absorption}, Definition~\ref{def:substitution} and Lemma~\ref{lem:substitution-eval} \\
 Definition~\ref{def:star}\newline\emph{Star powers} & Definition~\ref{def:substitution} and Lemma~\ref{lem:substitution-eval} \\
+Remark~\ref{rem:star-indexing}\newline\emph{Why the variables are functions} & Theorem~\ref{thm:center-absorbs}, Definition~\ref{def:absorption} and Lemma~\ref{lem:absorption-rename} \\
 Definition~\ref{def:essential}\newline\emph{Essential relation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Definition~\ref{def:block-essential}\newline\emph{Essential for a partition} & Definition~\ref{def:essential} \\
 Lemma~\ref{lem:essential-nonempty}\newline\emph{Essentiality forces nonemptiness} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
@@ -1500,7 +1581,7 @@ Remark~\ref{rem:step3-shape}\newline\emph{The shape of Step 3} & Definitions and
 Corollary~\ref{cor:central-ternary}\newline\emph{Central absorption is witnessed by a ternary term} & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:central-absorption}, Corollary~\ref{cor:unbounded-no-absorption} and Lemma~\ref{lem:doubling} \\
 Remark~\ref{rem:arities}\newline\emph{The arities produced} & Lemma~\ref{lem:doubling} and Corollary~\ref{cor:central-ternary} \\
 Remark~\ref{rem:not-proved}\newline\emph{What is \emph{not} proved here} & Corollary~\ref{cor:central-ternary} \\
-\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:substitution}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups}, Lemma~\ref{lem:doubling}, Lemma~\ref{lem:taylor-binary}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Lemma~\ref{lem:preservation} and Proposition~\ref{prop:absorption-blocks} \\
+\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:substitution}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups}, Lemma~\ref{lem:doubling}, Lemma~\ref{lem:taylor-binary}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Lemma~\ref{lem:preservation}, Definition~\ref{def:product}, Definition~\ref{def:star} and Proposition~\ref{prop:absorption-blocks} \\
 \end{longtable}
 
 \section{Suggested module order}\label{app:module-order}
@@ -1569,10 +1650,6 @@ from its ambient libraries.
       the tuples $\vec x^{\,(i)}$ in Lemma~\ref{lem:doubling}. The
       block-respecting refinement of the first is not imported: it is proved
       as Lemma~\ref{lem:block-enumeration}.
-\item \textbf{Euclidean division.} Every $p\in[k^{\ell+1}]$ is uniquely
-      $p=(j-1)k^{\ell}+q$ with $j\in[k]$ and $q\in[k^{\ell}]$, and the maps
-      $p\mapsto j$, $p\mapsto q$ are computable from $p$; this is the indexing
-      underlying Definition~\ref{def:star}.
 \item \textbf{Elementary inequalities on indices.} For the block bookkeeping of
       Lemma~\ref{lem:essential-groups}: if $I_j$ is a block with $|I_j|>1$ and
       $u\in I_j$, then $|I\setminus\{u\}|<|I|$ and
@@ -1582,6 +1659,15 @@ from its ambient libraries.
 Simultaneous substitution of terms into terms is deliberately \emph{not} in
 this list. It is part of the development (Definition~\ref{def:substitution},
 Lemma~\ref{lem:substitution-eval}), not of the imported background.
+
+Euclidean division was on this list in earlier drafts, as the indexing
+underlying Definition~\ref{def:star}: every $p\in[k^{\ell+1}]$ is uniquely
+$(j-1)k^{\ell}+q$. It is no longer imported, because the star powers are now
+indexed by $V_{\ell}=[k]^{[\ell]}$ and the block decomposition is the splitting
+of a function into its first value and the rest; see
+Remark~\ref{rem:star-indexing}. Item~1 above absorbs what remains: the only
+cardinality fact the change introduces is that a finite nonempty set admits a
+bijection with some $[m]$, used in Lemma~\ref{lem:absorption-rename}.
 
 The list is intended to cover the imported inferences, without a claim of
 demonstrated exhaustiveness; reviewers are invited to report any use of
