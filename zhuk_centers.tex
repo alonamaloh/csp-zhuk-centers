@@ -490,13 +490,15 @@ because the blocks partition $I$.
 \end{proof}
 
 \begin{remark}[The only relational constructions used]\label{rem:pp-usage}
-Parts (a)--(e) of Lemma~\ref{lem:pp} are all that is needed to see that the
-relations built in this document are subuniverses. They are used in exactly
-three places: the neighborhoods $a+R$ of Definition~\ref{def:neighborhood}, the
-projections and the single reindexing in the regrouping
-Lemma~\ref{lem:essential-groups}, and the doubled relation $R'$ of
-Lemma~\ref{lem:doubling}. No general theory of primitive positive definability
-is required.
+Lemma~\ref{lem:pp} contains all the relational closure facts used in this
+document; no general theory of primitive positive definability is required.
+Its principal applications are the arity-reduction and regrouping
+constructions of Part~\ref{part:essential}, the neighborhoods $a+R$ and the
+right center of Part~\ref{part:centers}, and the relations $\beta(R)$, $P$, $Q$
+and $R'$ built in Lemma~\ref{lem:doubling}. All five parts are needed:
+reindexing appears in the base case of Lemma~\ref{lem:essential-groups} and in
+the right center, and the cylinder appears in Step~4 of
+Lemma~\ref{lem:doubling}.
 \end{remark}
 
 \section{Absorption}\label{sec:absorption}
@@ -523,14 +525,19 @@ notion of ``the subalgebra on $D$'' is needed.
 \begin{remark}[The quantifier form matters]\label{rem:absorption-quantifier}
 Definition~\ref{def:absorption} constrains the tuple $(z_1,\dots,z_m)$ rather
 than quantifying over a separate list $e_1,\dots,e_m\in E$ of which one entry is
-then overwritten. The two readings differ exactly when $E=\varnothing$: the
-second is vacuous for every $m\ge1$, while the first is vacuous only for
-$m\ge2$ and \emph{fails} for $m=1$, where it asserts
-$t^{\bA}(z_1)\in\varnothing$ for all $z_1\in D$. The first reading is the
-correct one, in the sense that it is the one for which
-Theorem~\ref{thm:relational-absorption} is true: for $S=\varnothing$ and $m=1$
-the relation $R=A$ is $S$-essential of arity $1$, so the theorem must deny
-$1$-ary absorption.
+then overwritten. For $E\ne\varnothing$ the two readings agree. They differ
+only when $E=\varnothing$: the overwrite reading is then vacuous for every
+$m\ge1$, while the tuple reading is vacuous for $m\ge2$ and, for $m=1$, asserts
+$t^{\bA}(z_1)\in\varnothing$ for all $z_1\in D$ --- which is vacuously true if
+$D=\varnothing$ and false otherwise. So the readings part company exactly at
+$E=\varnothing$, $m=1$, $D\ne\varnothing$.
+
+The tuple reading is the correct one, in the sense that it is the one for which
+Theorem~\ref{thm:relational-absorption} is true. Take $S=\varnothing$, $m=1$
+and $D=A$: the relation $R=A$ is $S$-essential of arity $1$, being nonempty by
+Convention~\ref{conv:standing}(b) and disjoint from $S$, so the theorem must
+deny $1$-ary absorption. This is the one place where the nonemptiness of $A$ is
+doing work in this remark.
 \end{remark}
 
 \begin{remark}[Empty and full]\label{rem:absorption-degenerate}
@@ -819,9 +826,9 @@ For the converse, assume there is no $S$-essential relation of arity $m$.
 If $S=A$, every $t\in\Tm(m)$ witnesses $S\ab\bA$, since all its values lie in
 $A=S$; and $x_1\in\Tm(m)$, so such a $t$ exists.
 
-If $S=\varnothing$ and $m\ge2$, the witnessing condition of
-Definition~\ref{def:absorption} is vacuous, because it requires $z_j\in S$ for
-the $m-1\ge1$ indices $j\ne i$. If $S=\varnothing$ and $m=1$, the hypothesis is
+If $S=\varnothing$ and $m\ge2$, take $t=x_1\in\Tm(m)$: the witnessing
+condition of Definition~\ref{def:absorption} is vacuous for it, because the
+condition requires $z_j\in S=\varnothing$ for the $m-1\ge1$ indices $j\ne i$. If $S=\varnothing$ and $m=1$, the hypothesis is
 unsatisfiable: $R=A$ is an $S$-essential relation of arity $1$, being nonempty
 and disjoint from $S$. So in either case there is nothing to prove.
 
@@ -1037,11 +1044,17 @@ Theorem~\ref{thm:center-step} at coordinate $i=j$ verbatim --- $d_j\in A$ and
 $d_{j'}\in C$ for $j'\ne j$, with no element of $C$ demanded at coordinate $j$
 itself --- and that theorem gives
 \[
- \bigl|t^{\bA}(d_1,\dots,d_k)+R\bigr|\ \ge\ \min\bigl(|B|,\;|d_j+R|+1\bigr)
- \ \ge\ \min\bigl(|B|,\;|z_p+R|+\ell+1\bigr),
+ \bigl|t^{\bA}(d_1,\dots,d_k)+R\bigr|\ \ge\ \min\bigl(|B|,\;|d_j+R|+1\bigr).
 \]
-the last step because $\min(N,\min(N,x)+1)=\min(N,x+1)$. This is
-($\ast_{\ell+1}$).
+Writing $N:=|B|$ and $x:=|z_p+R|+\ell$, the inductive bound $|d_j+R|\ge\min(N,x)$
+gives
+\[
+ \min\bigl(N,\;|d_j+R|+1\bigr)\ \ge\ \min\bigl(N,\;\min(N,x)+1\bigr)
+ \ =\ \min(N,\;x+1),
+\]
+the first step by monotonicity of $\min$ in its second argument and the second
+by the identity $\min(N,\min(N,x)+1)=\min(N,x+1)$, both recorded in
+\hyperref[app:background]{Appendix~C}. This is ($\ast_{\ell+1}$).
 
 Now take $\ell=|B|-1$, let $p\in[k^{\ell}]$ and let $z_1,\dots,z_{k^{\ell}}$
 satisfy $z_p\in A$ and $z_r\in C$ for $r\ne p$. Since $|z_p+R|\ge1$ by
@@ -1174,8 +1187,8 @@ Theorem~\ref{thm:center-central} applies.
 \section{The essential doubling trick}\label{sec:doubling}
 
 \begin{lemma}[Zhuk--Kozik essential doubling]\label{lem:doubling}
-Let $n\ge1$ and let $\bA_0,\dots,\bA_{n+1}$ be finite algebras with
-$\bA_{n+1}$ idempotent. Let $C\le\bA_0$, $B_i\le\bA_i$ for $i\in[n]$, and
+Let $n\ge1$ and let $\bA_0,\dots,\bA_{n+1}$ be algebras with $\bA_{n+1}$
+finite and idempotent. Let $C\le\bA_0$, $B_i\le\bA_i$ for $i\in[n]$, and
 $C'\le\bA_{n+1}$ with $C'\aZ\bA_{n+1}$. If there exists a
 $(C,B_1,\dots,B_n,C')$-essential relation
 $R\le\bA_0\times\cdots\times\bA_{n+1}$, then there exists a
@@ -1186,24 +1199,37 @@ $(C,B_1,\dots,B_n,B_n,\dots,B_1,C)$-essential relation
 of arity $2n+2$.
 \end{lemma}
 \begin{proof}
+Throughout the proof write
+\[
+ D_0:=C,\qquad D_r:=B_r\ (1\le r\le n),\qquad D_{n+1}:=C',
+\]
+so that the designated subuniverses of the hypothesis are $D_0,\dots,D_{n+1}$
+and the box of \eqref{eq:E1} at index $i$ is
+$\prod_{r\ne i}D_r$ with $A_i$ inserted at position $i$. This avoids the
+schematic ellipsis $C\times\cdots\times A_i\times\cdots\times C'$, which is
+ambiguous at $i=0$ and $i=n+1$, where the free coordinate replaces $C$ or $C'$
+rather than some $B_r$.
+
 For a relation $P\le\bA_0\times\cdots\times\bA_{n+1}$ write
 \[
- \beta(P):=\pi_{n+1}\bigl(P\cap(C\times B_1\times\cdots\times B_n\times A_{n+1})\bigr)\;\le\;\bA_{n+1},
+ \beta(P):=\pi_{n+1}\bigl(P\cap(D_0\times\cdots\times D_n\times A_{n+1})\bigr)\;\le\;\bA_{n+1},
 \]
 a subuniverse by Lemma~\ref{lem:pp}(b),(c).
 
 \emph{Step 0: choose $R$ minimizing $|\beta(R)|$.} The family of
 $(C,B_1,\dots,B_n,C')$-essential relations is nonempty by hypothesis, and
 $|\beta(P)|$ is a natural number bounded by $|A_{n+1}|$; so the set of values
-$\{|\beta(P)|:P\text{ essential}\}$ is a nonempty set of naturals and has a
-least element. Choose $R$ in the family attaining it, and write
-$B':=\beta(R)$. Since all the $\bA_i$ are finite the family is itself finite,
-so the selection is an ordinary minimum over a finite set; only the finiteness
-of $\bA_{n+1}$ is used in the rest of the proof.
+$\{|\beta(P)|:P\text{ is }(C,B_1,\dots,B_n,C')\text{-essential}\}$ is a
+nonempty set of naturals bounded by $|A_{n+1}|$, and therefore has a least
+element. Some essential $P$ attains that least value, because the value belongs
+to the displayed set; name one such $P$ as $R$ and write $B':=\beta(R)$. Only
+the finiteness of $\bA_{n+1}$ is used: the family of essential relations need
+not be finite, and no choice principle is involved, since a single attaining
+relation is named by existential instantiation.
 
 By \eqref{eq:E1} at index $n+1$, $B'\ne\varnothing$. By \eqref{eq:E2},
 $B'\cap C'=\varnothing$: an element of the intersection would be the last
-coordinate of a tuple of $R$ lying in $C\times B_1\times\cdots\times B_n\times C'$.
+coordinate of a tuple of $R$ lying in $D_0\times\cdots\times D_n\times D_{n+1}$.
 By Lemma~\ref{lem:essential-nonempty}, $C$, the $B_i$ and $C'$ are all nonempty.
 
 \emph{Step 1: the generation property of $B'$.} We prove
@@ -1212,9 +1238,10 @@ By Lemma~\ref{lem:essential-nonempty}, $C$, the $B_i$ and $C'$ are all nonempty.
  \tag{$\ddagger$}
 \]
 Let $b_1\in B'$ be arbitrary. For each $i\in\{0,\dots,n\}$ let
-$\vec x^{\,(i)}\in R\cap(C\times B_1\times\cdots\times A_i\times\cdots\times B_n\times C')$
-be the witness of \eqref{eq:E1} at index $i$; note $x^{(i)}_{n+1}\in C'$. Let
-$\vec y\in R\cap(C\times B_1\times\cdots\times B_n\times A_{n+1})$ have
+$\vec x^{\,(i)}\in R$ be the witness of \eqref{eq:E1} at index $i$, so
+$x^{(i)}_{r}\in D_r$ for every $r\ne i$; in particular
+$x^{(i)}_{n+1}\in D_{n+1}=C'$ because $i\le n$. Let
+$\vec y\in R\cap(D_0\times\cdots\times D_n\times A_{n+1})$ have
 $y_{n+1}=b_1$, which exists because $b_1\in B'$. Put
 \[
  R'':=\Sg_{\bA_0\times\cdots\times\bA_{n+1}}\bigl(\{\vec x^{\,(0)},\dots,\vec x^{\,(n)},\vec y\}\bigr)\subseteq R .
@@ -1283,10 +1310,11 @@ it twice, at the pairs $(b',b)$ and $(b''',b)$, and the second of these applies
 it to $b'''$, an element that Step~3 itself produced from the first
 application. There is no circularity: $b'''$ is supplied with the side
 condition $b'''\in B'$, which is all ($\ddagger$) requires of its arguments.
-A formalization should therefore prove ($\ddagger$) as a standalone lemma
-quantified over both arguments, rather than as an assertion about the
-particular $b$ fixed in Step~2 --- the latter is the form in which the source
-states it, and it does not suffice for the second application.
+A formalization should therefore package ($\ddagger$) as a standalone,
+universally quantified lemma, proved before the element $b$ of Step~2 is fixed.
+That is also how~\cite{BradyNotes} states it, immediately before specializing
+$b$; the gain here is only that the two later instantiations, including the one
+at the newly produced $b'''$, are named rather than left to the reader.
 \end{remark}
 
 \emph{Step 4: the doubled relation.} Define
@@ -1312,11 +1340,11 @@ coordinates into the order $y_n,\dots,y_0$, using Lemma~\ref{lem:pp}(c),(e).
 
 Label the coordinates of $R'$ as $0,\dots,n$ on the $x$-side and
 $n^{\dagger},\dots,0^{\dagger}$ on the $y$-side, with designated subuniverses
-$C,B_1,\dots,B_n$ and $B_n,\dots,B_1,C$ respectively.
+$D_0,\dots,D_n$ and $D_n,\dots,D_0$ respectively.
 
 \eqref{eq:E1} \emph{at an $x$-side coordinate $i\in\{0,\dots,n\}$}: take
 $\vec x=\vec x^{\,(i)}$, so $x_{n+1}\in C'$, and take
-$\vec y\in R\cap(C\times B_1\times\cdots\times B_n\times\{b\})$, which exists
+$\vec y\in R\cap(D_0\times\cdots\times D_n\times\{b\})$, which exists
 because $b\in B'$. Then $(x_{n+1},b)\in C'\times\{b\}\subseteq S$, so the
 resulting tuple lies in $R'$; its $x$-side has the free coordinate at $i$ and
 designated entries elsewhere, and its $y$-side is entirely designated.
@@ -1325,7 +1353,7 @@ designated entries elsewhere, and its $y$-side is entirely designated.
 of $\vec x$ and $\vec y$ and using $\{b\}\times C'\subseteq S$.
 
 \eqref{eq:E2}: suppose $(x_0,\dots,x_n,y_n,\dots,y_0)\in R'$ with
-$x_0,y_0\in C$ and $x_i,y_i\in B_i$ for $i\in[n]$, witnessed by
+$x_r,y_r\in D_r$ for every $r\in\{0,\dots,n\}$, witnessed by
 $x_{n+1},y_{n+1}$. Then $x_{n+1}\in\beta(R)=B'$ and $y_{n+1}\in B'$ by the
 definition of $\beta$, while $(x_{n+1},y_{n+1})\in S$; this contradicts Step~3.
 \end{proof}
@@ -1438,9 +1466,9 @@ Definition~\ref{def:hom}\newline\emph{Homomorphism} & Definitions and imported b
 Lemma~\ref{lem:hom-image}\newline\emph{Images and generation} & Lemma~\ref{lem:sg-terms} \\
 Lemma~\ref{lem:pp}\newline\emph{Relational constructions} & Lemma~\ref{lem:generation} and Lemma~\ref{lem:hom-image} \\
 Lemma~\ref{lem:block-enumeration}\newline\emph{Block-respecting enumeration} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
-Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Definition~\ref{def:neighborhood}, Lemma~\ref{lem:essential-groups} and Lemma~\ref{lem:doubling} \\
+Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:doubling} and Lemma~\ref{lem:essential-groups} \\
 Definition~\ref{def:absorption}\newline\emph{Absorption} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
-Remark~\ref{rem:absorption-quantifier}\newline\emph{The quantifier form matters} & Definition~\ref{def:absorption} and Theorem~\ref{thm:relational-absorption} \\
+Remark~\ref{rem:absorption-quantifier}\newline\emph{The quantifier form matters} & Definition~\ref{def:absorption}, Theorem~\ref{thm:relational-absorption} and Convention~\ref{conv:standing} \\
 Remark~\ref{rem:absorption-degenerate}\newline\emph{Empty and full} & Convention~\ref{conv:subalgebra} \\
 Definition~\ref{def:taylor}\newline\emph{Taylor identities} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Remark~\ref{rem:taylor-usual}\newline\emph{Relation to the usual definition} & Definition~\ref{def:taylor} and Theorem~\ref{thm:center-step} \\
@@ -1600,9 +1628,12 @@ Lem.\ 3.10.4 & Lemma~\ref{lem:taylor-binary} & Stated at an arbitrary
 coordinate $i$ rather than at the first, and with the Taylor identity
 relativized to $D$.\\
 Thm.\ 3.10.5 & Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}
-& Split. The source proves the enlargement step inside the proof of the
-absorption statement; here it is a separate theorem, and the iteration is an
-explicit induction on the star exponent.\\
+& Split, and \emph{stronger} in hypotheses. The source proves the enlargement
+step inside the proof of the absorption statement; here it is a separate
+theorem, and the iteration is an explicit induction on the star exponent. The
+source also assumes the left center is nontrivial; that hypothesis is dropped
+here, the degenerate cases $C=\varnothing$ and $C=A$ being covered by
+Remark~\ref{rem:degenerate-center}.\\
 Thm.\ 3.10.6 & Theorem~\ref{thm:center-central} & None.\\
 Def.\ 3.10.7 & Definition~\ref{def:central-absorption} & None.\\
 Cor.\ 3.10.8 & Corollary~\ref{cor:zhuk-center} & None.\\

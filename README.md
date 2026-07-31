@@ -113,8 +113,8 @@ suggested module order) is coarser and is maintained by hand.
 
 ## Status
 
-Sixth draft, after five rounds of review, the last two from a second
-independent reviewer. Every round confirmed the central mathematics, including the two
+Seventh draft, after six rounds of review across two independent reviewers.
+The final round raised no mathematical objection. Every round confirmed the central mathematics, including the two
 arguments the first draft flagged as riskiest — the block-regrouping induction
 (Lemma 3.7) and the minimality argument in the doubling trick (Step 1 of
 Lemma 7.1). The defects found were all in the foundations, in quantifier
@@ -144,8 +144,8 @@ discipline, and in type-level bookkeeping, and are repaired:
   itself**, applying its own Step 1 twice — the second time to an element the
   first application produced. Step 1's conclusion is now an explicitly
   quantified statement (‡) about ordered pairs, cited by instantiation, with
-  Remark 7.2 recording why the source's version (about one fixed element)
-  does not suffice for the second use.
+  Remark 7.2 recording that a formalization should prove (‡) before fixing
+  the element it is later instantiated at.
 - Attribution corrected (Barto–Kazda for Part II), the concordance qualified
   where this document proves something weaker than the source, and the
   cross-reference index no longer claims to be a dependency graph.
