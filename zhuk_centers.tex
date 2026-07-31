@@ -191,6 +191,21 @@ iterating the doubling trick from arity $3$ are $2+2^{k}$, and the argument in
 Corollary~\ref{cor:central-ternary} is arranged here to need only that the
 arity strictly increases.
 
+\medskip
+
+\noindent\textbf{What the formalizations found.} This document has been
+formalized twice, in two independent proof assistants: in Lean~4 with Mathlib,
+and in a second system. Both formalizations are complete and follow the
+numbering used here. In three places they showed that a hypothesis is
+redundant, an auxiliary lemma unnecessary, or a statement more general than its
+only consumer requires. Nothing below is incorrect, so the text is left as it
+stands and each point is recorded where it arises:
+Remark~\ref{rem:blocks-nonempty-free},
+Remark~\ref{rem:enumeration-avoidable} and
+Remark~\ref{rem:doubling-specialized}. What is worth recording about all three
+is how they were found --- by the two formalizations \emph{agreeing} on a
+simplification, rather than by either one alone.
+
 \part{Algebras, terms, and absorption}
 \label{part:algebras}
 
@@ -504,6 +519,18 @@ concatenate the enumerations. The result lists each element exactly once
 because the blocks partition $I$.
 \end{proof}
 
+\begin{remark}[The enumeration is avoidable]\label{rem:enumeration-avoidable}
+Lemma~\ref{lem:block-enumeration} has one consumer: the proof of
+Theorem~\ref{thm:center-central} enumerates the generators so that the three
+blocks appear consecutively, which is what lets it name the indices $p\le q$
+and choose $m$ between them. Neither formalization needed it. Both take the
+variable type of the term supplied by Lemma~\ref{lem:sg-terms} to \emph{be} the
+generating set, so each variable already records which block it came from, no
+sorted enumeration is required, and the selector $\mu$ of that proof reduces to
+the test ``is this generator's second coordinate $a$''. The lemma is retained
+because the proof as written here uses it.
+\end{remark}
+
 \begin{remark}[The only relational constructions used]\label{rem:pp-usage}
 Lemma~\ref{lem:pp} contains all the relational closure facts used in this
 document; no general theory of primitive positive definability is required.
@@ -729,6 +756,22 @@ If $I=[m]$ and $\mathcal P$ is the partition into the singletons
 $\{1\},\dots,\{m\}$ in this order, this is exactly $S$-essentiality of arity
 $m$ in the sense of Definition~\ref{def:essential}.
 \end{definition}
+
+\begin{remark}[The blocks need not be assumed nonempty]\label{rem:blocks-nonempty-free}
+Nonemptiness of the blocks is a consequence of \eqref{eq:B1} and
+\eqref{eq:B2}, not an extra hypothesis. If $I_j=\varnothing$ then
+$\{x\in A^{I}:x_i\in S\text{ for all }i\in I\setminus I_j\}$ is exactly
+$S^{I}$, so \eqref{eq:B1} at $j$ asserts $R\cap S^{I}\ne\varnothing$, which
+\eqref{eq:B2} denies. The same applies to
+Lemma~\ref{lem:essential-groups}, which inherits the hypothesis from here.
+
+Both formalizations derive it rather than assuming it, and the saving is not
+local: the proof of Theorem~\ref{thm:relational-absorption} checks that the
+blocks $X_1,\dots,X_m$ it builds are nonempty, and that check is the only
+reason the three degenerate cases $S=A$, $S=\varnothing$ with $m\ge2$, and
+$S=\varnothing$ with $m=1$ are separated off at the start of that proof. With
+nonemptiness derived, the case analysis disappears.
+\end{remark}
 
 \begin{lemma}[Essentiality forces nonemptiness]\label{lem:essential-nonempty}
 If $R\le\bA_1\times\cdots\times\bA_m$ is $(S_1,\dots,S_m)$-essential and
@@ -1437,6 +1480,26 @@ $x_{n+1},y_{n+1}$. Then $x_{n+1}\in\beta(R)=B'$ and $y_{n+1}\in B'$ by the
 definition of $\beta$, while $(x_{n+1},y_{n+1})\in S$; this contradicts Step~3.
 \end{proof}
 
+\begin{remark}[Only the all-equal instance is used]\label{rem:doubling-specialized}
+Lemma~\ref{lem:doubling} is stated over a mixed product, with designated
+subuniverses $C,B_1,\dots,B_n,C'$ that may differ. Its only consumer,
+Corollary~\ref{cor:central-ternary}, applies it with every factor equal to
+$\bA$ and every designated subuniverse equal to $C$, and both formalizations
+state and prove only that specialization. The gain is structural rather than
+cosmetic: in the specialized form every relation is a subuniverse of a
+\emph{power}, so a product of a family of algebras --- needed nowhere else in
+this document --- is never required, and the conclusion is literally
+$S$-essentiality of arity $2n+2$ in the sense of
+Definition~\ref{def:essential}.
+
+Step~4 also reverses the second half of the doubled index, writing
+$\bA_0\times\cdots\times\bA_n\times\bA_n\times\cdots\times\bA_0$. Essentiality
+does not depend on the order of the coordinates, so neither formalization
+reverses anything; both index the doubled relation by two copies of
+$\{0,\dots,n\}$ side by side and reindex once at the end, by
+Lemma~\ref{lem:pp}(e).
+\end{remark}
+
 \section{Central absorption is ternary}\label{sec:ternary}
 
 \begin{corollary}[Central absorption is witnessed by a ternary term]\label{cor:central-ternary}
@@ -1545,6 +1608,7 @@ Definition~\ref{def:hom}\newline\emph{Homomorphism} & Definitions and imported b
 Lemma~\ref{lem:hom-image}\newline\emph{Images and generation} & Lemma~\ref{lem:sg-terms} \\
 Lemma~\ref{lem:pp}\newline\emph{Relational constructions} & Lemma~\ref{lem:generation} and Lemma~\ref{lem:hom-image} \\
 Lemma~\ref{lem:block-enumeration}\newline\emph{Block-respecting enumeration} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Remark~\ref{rem:enumeration-avoidable}\newline\emph{The enumeration is avoidable} & Lemma~\ref{lem:block-enumeration}, Theorem~\ref{thm:center-central} and Lemma~\ref{lem:sg-terms} \\
 Remark~\ref{rem:pp-usage}\newline\emph{The only relational constructions used} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:doubling} and Lemma~\ref{lem:essential-groups} \\
 Definition~\ref{def:absorption}\newline\emph{Absorption} & Lemma~\ref{lem:absorption-rename} \\
 Lemma~\ref{lem:absorption-rename}\newline\emph{Renaming the variable set} & Lemma~\ref{lem:substitution-eval} \\
@@ -1557,6 +1621,7 @@ Definition~\ref{def:star}\newline\emph{Star powers} & Definition~\ref{def:substi
 Remark~\ref{rem:star-indexing}\newline\emph{Why the variables are functions} & Theorem~\ref{thm:center-absorbs}, Definition~\ref{def:absorption} and Lemma~\ref{lem:absorption-rename} \\
 Definition~\ref{def:essential}\newline\emph{Essential relation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Definition~\ref{def:block-essential}\newline\emph{Essential for a partition} & Definition~\ref{def:essential} \\
+Remark~\ref{rem:blocks-nonempty-free}\newline\emph{The blocks need not be assumed nonempty} & Lemma~\ref{lem:essential-groups} and Theorem~\ref{thm:relational-absorption} \\
 Lemma~\ref{lem:essential-nonempty}\newline\emph{Essentiality forces nonemptiness} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Proposition~\ref{prop:essential-down}\newline\emph{Passing to smaller arity} & Lemma~\ref{lem:pp} \\
 Proposition~\ref{prop:absorption-blocks}\newline\emph{Absorption forbids essential relations} & Lemma~\ref{lem:preservation} and Definition~\ref{def:absorption} \\
@@ -1578,10 +1643,11 @@ Definition~\ref{def:central-absorption}\newline\emph{Central absorption} & Defin
 Corollary~\ref{cor:zhuk-center}\newline\emph{Zhuk's center theorem} & Definition~\ref{def:central-absorption}, Theorem~\ref{thm:center-absorbs}, Lemma~\ref{lem:generation} and Theorem~\ref{thm:center-central} \\
 Lemma~\ref{lem:doubling}\newline\emph{Zhuk--Kozik essential doubling} & Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-nonempty}, Lemma~\ref{lem:hom-image}, Lemma~\ref{lem:generation}, Lemma~\ref{lem:singleton} and Definition~\ref{def:central-absorption} \\
 Remark~\ref{rem:step3-shape}\newline\emph{The shape of Step 3} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Remark~\ref{rem:doubling-specialized}\newline\emph{Only the all-equal instance is used} & Lemma~\ref{lem:doubling}, Corollary~\ref{cor:central-ternary}, Definition~\ref{def:essential} and Lemma~\ref{lem:pp} \\
 Corollary~\ref{cor:central-ternary}\newline\emph{Central absorption is witnessed by a ternary term} & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:central-absorption}, Corollary~\ref{cor:unbounded-no-absorption} and Lemma~\ref{lem:doubling} \\
 Remark~\ref{rem:arities}\newline\emph{The arities produced} & Lemma~\ref{lem:doubling} and Corollary~\ref{cor:central-ternary} \\
 Remark~\ref{rem:not-proved}\newline\emph{What is \emph{not} proved here} & Corollary~\ref{cor:central-ternary} \\
-\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:substitution}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups}, Lemma~\ref{lem:doubling}, Lemma~\ref{lem:taylor-binary}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Lemma~\ref{lem:preservation}, Definition~\ref{def:product}, Definition~\ref{def:star} and Proposition~\ref{prop:absorption-blocks} \\
+\emph{Narrative outside labeled statements}\newline(prose of Parts~I--III) & Theorem~\ref{thm:relational-absorption}, Definition~\ref{def:substitution}, Lemma~\ref{lem:substitution-eval}, Lemma~\ref{lem:pp}, Lemma~\ref{lem:essential-groups}, Lemma~\ref{lem:doubling}, Lemma~\ref{lem:taylor-binary}, Theorem~\ref{thm:center-step}, Theorem~\ref{thm:center-absorbs}, Theorem~\ref{thm:center-central}, Corollary~\ref{cor:central-ternary}, Convention~\ref{conv:subalgebra}, Definition~\ref{def:central-absorption}, Remark~\ref{rem:blocks-nonempty-free}, Remark~\ref{rem:enumeration-avoidable}, Remark~\ref{rem:doubling-specialized}, Lemma~\ref{lem:preservation}, Definition~\ref{def:product}, Definition~\ref{def:star} and Proposition~\ref{prop:absorption-blocks} \\
 \end{longtable}
 
 \section{Suggested module order}\label{app:module-order}
