@@ -60,8 +60,8 @@ Let $\bA$ and $\bB$ be finite idempotent algebras of a common signature and let
 $R$ be a subdirect subuniverse of $\bA\times\bB$. The \emph{left center} of $R$
 is the set $C$ of elements of $A$ related by $R$ to every element of $B$. We
 give a complete and self-contained proof of Zhuk's theorem that if $\bB$ has a
-Taylor term and has no proper binary absorbing subalgebra, then $C$ absorbs
-$\bA$ --- and, through the Zhuk--Kozik essential doubling trick, that the
+Taylor term and has no nonempty proper binary absorbing subuniverse, then $C$
+absorbs $\bA$ --- and, through the Zhuk--Kozik essential doubling trick, that the
 absorption is witnessed by a \emph{ternary} term. Everything is proved from the
 definitions of terms, substitution, subuniverses, and generation: the relational
 description of absorption by essential relations, which supplies the passage
@@ -259,13 +259,19 @@ $f^{\bA}(a,\dots,a)=a$ by Definition~\ref{def:idempotent}.
 \end{proof}
 
 \begin{definition}[Products]\label{def:product}
-Given algebras $\bA_1,\dots,\bA_m$, the product algebra
-$\bA_1\times\cdots\times\bA_m$ has universe $A_1\times\cdots\times A_m$ and
-operations applied coordinatewise. A \emph{relation} between
-$\bA_1,\dots,\bA_m$ is a subuniverse $R\le\bA_1\times\cdots\times\bA_m$; its
-\emph{arity} is $m$. We write $\bA^m$ for the $m$-fold product of $\bA$ with
-itself, and $\bA^{X}$ for the product of copies of $\bA$ indexed by a set $X$,
-whose universe is the set of functions $X\to A$.
+Given a family of algebras $(\bA_i)_{i\in I}$ indexed by a set $I$, the product
+algebra $\prod_{i\in I}\bA_i$ has universe $\prod_{i\in I}A_i$ and operations
+applied coordinatewise. A \emph{relation} is a subuniverse
+$R\le\prod_{i\in I}\bA_i$; when $I=[m]$ we write
+$\bA_1\times\cdots\times\bA_m$ and call $m$ the \emph{arity}. We write $\bA^m$
+for the $m$-fold product of $\bA$ with itself, and $\bA^{X}$ for the product of
+copies of $\bA$ indexed by a set $X$, whose universe is the set of functions
+$X\to A$.
+
+The index set is deliberately arbitrary: Theorem~\ref{thm:relational-absorption}
+forms $\bA^{A^m}$ and projects it onto a subset of $A^m$, so the constructions of
+Lemma~\ref{lem:pp} must be available for index sets that are not initial
+segments of the naturals.
 \end{definition}
 
 \begin{definition}[Terms]\label{def:term}
@@ -415,22 +421,21 @@ $\{t^{\bB}(h(s_1),\dots,h(s_N)):t\in\Tm(N)\}$, the left-hand side by (b).
 \end{proof}
 
 \begin{lemma}[Relational constructions]\label{lem:pp}
-Let $\bA_1,\dots,\bA_m$ be algebras.
+Let $(\bA_i)_{i\in I}$ be a family of algebras indexed by a set $I$.
 \begin{enumerate}\alphlabels\tightlist
-\item If $R,R'\le\bA_1\times\cdots\times\bA_m$ then
-      $R\cap R'\le\bA_1\times\cdots\times\bA_m$.
-\item If $R\le\bA_1\times\cdots\times\bA_m$ and $S_i\le\bA_i$ for each $i$,
-      then $R\cap(S_1\times\cdots\times S_m)\le\bA_1\times\cdots\times\bA_m$.
-\item If $R\le\bA_1\times\cdots\times\bA_m$ and $J\subseteq[m]$ then
+\item If $R,R'\le\prod_{i\in I}\bA_i$ then $R\cap R'\le\prod_{i\in I}\bA_i$.
+\item If $R\le\prod_{i\in I}\bA_i$ and $S_i\le\bA_i$ for each $i$, then
+      $R\cap\prod_{i\in I}S_i\le\prod_{i\in I}\bA_i$.
+\item If $R\le\prod_{i\in I}\bA_i$ and $J\subseteq I$ then
       $\pi_J(R)\le\prod_{i\in J}\bA_i$.
 \item If $h:\bA\to\bB$ is a homomorphism and $S\le\bB$, then
-      $h^{-1}(S)\le\bA$. In particular, for $J\subseteq[m]$ and
+      $h^{-1}(S)\le\bA$. In particular, for $J\subseteq I$ and
       $S\le\prod_{i\in J}\bA_i$, the cylinder $\pi_J^{-1}(S)$ is a subuniverse
-      of $\bA_1\times\cdots\times\bA_m$.
-\item If $\rho:[m']\to[m]$ is a bijection, the induced map
-      $\vec a\mapsto(a_{\rho(1)},\dots,a_{\rho(m')})$ is an isomorphism
-      $\bA_1\times\cdots\times\bA_m\to\bA_{\rho(1)}\times\cdots\times\bA_{\rho(m')}$,
-      and carries subuniverses to subuniverses.
+      of $\prod_{i\in I}\bA_i$.
+\item If $\rho:I'\to I$ is a bijection, the induced map
+      $(a_i)_{i\in I}\mapsto(a_{\rho(i')})_{i'\in I'}$ is an isomorphism
+      $\prod_{i\in I}\bA_i\to\prod_{i'\in I'}\bA_{\rho(i')}$, and carries
+      subuniverses to subuniverses.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -440,7 +445,8 @@ Lemma~\ref{lem:hom-image}(a) applied to the projection homomorphism. (d) If
 $h(a_r)\in S$ for $r\in[k]$ then
 $h(f^{\bA}(a_1,\dots,a_k))=f^{\bB}(h(a_1),\dots,h(a_k))\in S$. (e) The map is a
 bijection commuting with coordinatewise operations, so
-Lemma~\ref{lem:hom-image}(a) applies.
+Lemma~\ref{lem:hom-image}(a) applies. Nothing in (a)--(e) uses finiteness of
+$I$ or an ordering of it.
 \end{proof}
 
 \begin{remark}[The only relational constructions used]\label{rem:pp-usage}
@@ -883,10 +889,14 @@ proof needs to exclude the degenerate cases, and none does. Precisely:
       Remark~\ref{rem:absorption-quantifier} they are not vacuous at arity $1$.
       This is why Theorem~\ref{thm:center-absorbs} is proved in the tuple form
       of Definition~\ref{def:absorption} rather than by fixing a tuple of
-      elements of $C$; see Remark~\ref{rem:induction-shape}. The one case in
-      which the prescribed witness $t^{*(|B|-1)}$ does have arity $1$ is
-      $|B|=1$, and there subdirectness gives $C=A\ne\varnothing$, so the
-      assertion is not vacuous but true.
+      elements of $C$; see Remark~\ref{rem:induction-shape}. The prescribed
+      witness $t^{*(|B|-1)}$ has arity $k^{|B|-1}$, which equals $1$ exactly
+      when $|B|=1$ or $k=1$; and $k=1$ forces $|B|=1$, because
+      Lemma~\ref{lem:term-idempotent} makes a unary $t^{\bB}$ the identity
+      while a Taylor identity at its single coordinate makes it constant on
+      $B$, and $B\ne\varnothing$. So the arity is $1$ only when $|B|=1$, and
+      there subdirectness gives $C=A\ne\varnothing$: the assertion is then not
+      vacuous but true.
 \item Statements whose conclusion is a non-membership, such as
       Theorem~\ref{thm:center-central}, are immediate when $C=\varnothing$
       because $\Sg_{\bA^2}(\varnothing)=\varnothing$ by
@@ -899,31 +909,34 @@ proof needs to exclude the degenerate cases, and none does. Precisely:
 \begin{theorem}[One step towards the center]\label{thm:center-step}
 Let $\bA,\bB$ be finite idempotent algebras, let $R\le\bA\times\bB$ be
 subdirect with left center $C$, and let $t\in\Tm(k)$ be Taylor on $B$. Assume
-$\bB$ has no proper binary absorbing subalgebra. Then for every $a\in A$, every
-$i\in[k]$ and all $c_1,\dots,c_k\in C$,
+$\bB$ has no proper binary absorbing subalgebra. Then for every $i\in[k]$ and
+all $z_1,\dots,z_k\in A$ with $z_j\in C$ for every $j\ne i$,
 \[
- \bigl|\,t^{\bA}(c_1,\dots,c_{i-1},a,c_{i+1},\dots,c_k)+R\,\bigr|
- \;\ge\;\min\bigl(|B|,\;|a+R|+1\bigr).
+ \bigl|\,t^{\bA}(z_1,\dots,z_k)+R\,\bigr|
+ \;\ge\;\min\bigl(|B|,\;|z_i+R|+1\bigr).
 \]
 \end{theorem}
 \begin{proof}
-Write $a^{+}:=t^{\bA}(c_1,\dots,a,\dots,c_k)$ with $a$ in position $i$, and set
+Write $a:=z_i$ and $a^{+}:=t^{\bA}(z_1,\dots,z_k)$, and set
 \[
- E:=\bigl\{\,t^{\bB}(z_1,\dots,z_k)\;:\;z_i\in a+R,\;z_j\in B\ (j\ne i)\,\bigr\}.
+ E:=\bigl\{\,t^{\bB}(y_1,\dots,y_k)\;:\;y_i\in a+R,\;y_j\in B\ (j\ne i)\,\bigr\}.
 \]
+Note that no element of $C$ is required to exist: the hypothesis constrains only
+the coordinates $j\ne i$, and if $C=\varnothing$ and $k\ge2$ it is unsatisfiable,
+while if $k=1$ there are no such coordinates.
 
-\emph{Step 1: $a^{+}+R\supseteq E$.} Each $c_j\in C$ has $c_j+R=B$, so
-Lemma~\ref{lem:center-basic}(d) gives exactly this containment.
+\emph{Step 1: $a^{+}+R\supseteq E$.} Each $z_j$ with $j\ne i$ lies in $C$, so
+$z_j+R=B$, and Lemma~\ref{lem:center-basic}(d) gives exactly this containment.
 
-\emph{Step 2: $E\supseteq a+R$.} For $b\in a+R$ take $z_1=\cdots=z_k=b$; this is
+\emph{Step 2: $E\supseteq a+R$.} For $b\in a+R$ take $y_1=\cdots=y_k=b$; this is
 admissible because $a+R\subseteq B$, and $t^{\bB}(b,\dots,b)=b$ by
 Lemma~\ref{lem:term-idempotent}.
 
 \emph{Step 3: the dichotomy.} If $E\ne a+R$ then $|E|\ge|a+R|+1$ by Step 2, and
 $|a^{+}+R|\ge|E|\ge|a+R|+1$ by Step 1, which is the claim.
 
-So suppose $E=a+R$. Then $t^{\bB}(z_1,\dots,z_k)\in a+R$ whenever
-$z_i\in a+R$ and $z_j\in B$ for $j\ne i$. Apply Lemma~\ref{lem:taylor-binary}
+So suppose $E=a+R$. Then $t^{\bB}(y_1,\dots,y_k)\in a+R$ whenever
+$y_i\in a+R$ and $y_j\in B$ for $j\ne i$. Apply Lemma~\ref{lem:taylor-binary}
 inside $\bB$, with $D=B$, with $E_{\text{lem}}=a+R$ --- a subuniverse of $\bB$
 by Lemma~\ref{lem:center-basic}(a) --- and with the Taylor identity for $t$ at
 $i$ over $B$ supplied by Definition~\ref{def:taylor}. It yields
@@ -966,9 +979,11 @@ $j\in[k]$, $q\in[k^{\ell}]$ as in Definition~\ref{def:star}, so that
 Block $j$ carries $z_p$ at position $q$ and elements of $C$ elsewhere, so
 ($\ast_\ell$) gives $|d_j+R|\ge\min(|B|,|z_p+R|+\ell)$. Each block $j'\ne j$
 carries elements of $C$ only, so $d_{j'}\in C$ by
-Lemma~\ref{lem:center-basic}(c) and Lemma~\ref{lem:preservation}. Hence
-Theorem~\ref{thm:center-step}, applied with $d_j$ in position $j$ and the
-$C$-elements $d_{j'}$ elsewhere, gives
+Lemma~\ref{lem:center-basic}(c) and Lemma~\ref{lem:preservation}. The tuple
+$(d_1,\dots,d_k)$ therefore satisfies the hypothesis of
+Theorem~\ref{thm:center-step} at coordinate $i=j$ verbatim --- $d_j\in A$ and
+$d_{j'}\in C$ for $j'\ne j$, with no element of $C$ demanded at coordinate $j$
+itself --- and that theorem gives
 \[
  \bigl|t^{\bA}(d_1,\dots,d_k)+R\bigr|\ \ge\ \min\bigl(|B|,\;|d_j+R|+1\bigr)
  \ \ge\ \min\bigl(|B|,\;|z_p+R|+\ell+1\bigr),
@@ -1165,10 +1180,10 @@ lies in $\Sg_{\bA_{n+1}}(C'\cup\{b\})$.
 \[
  S:=\Sg_{\bA_{n+1}^2}\bigl((\{b\}\times C')\cup(C'\times\{b\})\bigr)\;\le\;\bA_{n+1}^2 .
 \]
-The generating set is symmetric, so $S$ is a symmetric relation; the source
-records this, but the argument below never uses it, drawing instead on the two
-generating blocks separately. A formalization may therefore omit the symmetry
-of $S$ entirely.
+The source describes $S$ as a symmetric relation. That plays no role below ---
+the argument draws on the two generating blocks $\{b\}\times C'$ and
+$C'\times\{b\}$ separately --- so symmetry is neither asserted nor proved here,
+and a formalization need not establish it.
 
 \emph{Step 3: $S\cap(B'\times B')=\varnothing$.} Suppose $(b',b'')\in S$ with
 $b',b''\in B'$.
@@ -1297,12 +1312,14 @@ collected instead in the intended imported-background package of
 Two cautions on how to read the table. First, it is a \emph{cross-reference
 index}, not a logical dependency graph: a row records the labels mentioned in a
 statement and its proof, including mentions that are expository rather than
-inferential. Second, several rows therefore cite forward --- the remarks
-\ref{rem:fixed-list}, \ref{rem:substitution-usage},
-\ref{rem:absorption-quantifier}, \ref{rem:taylor-usual} and
-\ref{rem:pp-usage} all point ahead to material they motivate. The only
-\emph{proof} dependency that runs forward is that of Theorem~\ref{thm:main},
-which is stated at the front and proved at the end.
+inferential. Second, several rows therefore cite forward: Remarks
+\ref{rem:substitution-usage}, \ref{rem:pp-usage},
+\ref{rem:absorption-quantifier}, \ref{rem:taylor-usual},
+\ref{rem:regrouping-weaker} and \ref{rem:degenerate-center} each point ahead to
+material they motivate or qualify, and Theorem~\ref{thm:main} names the two
+definitions its statement uses. The only \emph{proof} dependency that runs
+forward is that of Theorem~\ref{thm:main}, which is stated at the front and
+proved at the end.
 
 \renewcommand{\arraystretch}{1.12}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
@@ -1326,7 +1343,7 @@ Definition~\ref{def:subuniverse}\newline\emph{Subuniverse} & Definitions and imp
 Convention~\ref{conv:subalgebra}\newline\emph{Subalgebra means nonempty} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:generation}\newline\emph{Intersections and generation} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:singleton}\newline\emph{Singletons} & Definition~\ref{def:idempotent} \\
-Definition~\ref{def:product}\newline\emph{Products} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
+Definition~\ref{def:product}\newline\emph{Products} & Theorem~\ref{thm:relational-absorption} and Lemma~\ref{lem:pp} \\
 Definition~\ref{def:term}\newline\emph{Terms} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Definition~\ref{def:substitution}\newline\emph{Simultaneous substitution} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:substitution-eval}\newline\emph{Evaluation of a substitution} & Definition~\ref{def:term} \\
@@ -1359,7 +1376,7 @@ Corollary~\ref{cor:unbounded-no-absorption}\newline\emph{Unbounded arity defeats
 Definition~\ref{def:subdirect}\newline\emph{Subdirect} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Definition~\ref{def:neighborhood}\newline\emph{Neighborhood and left center} & Definitions and imported background (\hyperref[app:background]{Appendix~C}) only. \\
 Lemma~\ref{lem:center-basic}\newline\emph{Basic properties} & Lemma~\ref{lem:singleton}, Lemma~\ref{lem:pp} and Lemma~\ref{lem:preservation} \\
-Remark~\ref{rem:degenerate-center}\newline\emph{Degenerate centers} & Remark~\ref{rem:absorption-quantifier}, Theorem~\ref{thm:center-absorbs}, Definition~\ref{def:absorption}, Remark~\ref{rem:induction-shape}, Theorem~\ref{thm:center-central} and Lemma~\ref{lem:generation} \\
+Remark~\ref{rem:degenerate-center}\newline\emph{Degenerate centers} & Remark~\ref{rem:absorption-quantifier}, Theorem~\ref{thm:center-absorbs}, Definition~\ref{def:absorption}, Remark~\ref{rem:induction-shape}, Lemma~\ref{lem:term-idempotent}, Theorem~\ref{thm:center-central} and Lemma~\ref{lem:generation} \\
 Theorem~\ref{thm:center-step}\newline\emph{One step towards the center} & Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:term-idempotent}, Lemma~\ref{lem:taylor-binary}, Definition~\ref{def:taylor} and Convention~\ref{conv:subalgebra} \\
 Theorem~\ref{thm:center-absorbs}\newline\emph{Zhuk: the left center absorbs} & Definition~\ref{def:star}, Definition~\ref{def:absorption}, Lemma~\ref{lem:center-basic}, Lemma~\ref{lem:preservation} and Theorem~\ref{thm:center-step} \\
 Remark~\ref{rem:induction-shape}\newline\emph{Why the tuple form matters here} & Definition~\ref{def:absorption} \\
@@ -1380,11 +1397,13 @@ The citation index above, together with the imported background of
 import obligations of each module. A coarser topological order, useful for
 organizing source files, is:
 \begin{enumerate}\tightlist
-\item signatures, algebras, subuniverses, generation, products, homomorphisms;
-\item terms, term operations, preservation, generation by a fixed list,
-      variable renaming along a permutation;
-\item the relational constructions of Lemma~\ref{lem:pp} and the singleton
-      lemma;
+\item signatures, algebras, subuniverses, generation, indexed products, and the
+      singleton lemma;
+\item terms, term operations, simultaneous substitution and its evaluation law,
+      preservation, and generation by a fixed list;
+\item homomorphisms, the compatibility of images with generation, and the
+      five relational constructions of Lemma~\ref{lem:pp}: intersection, box
+      intersection, projection, cylinder and reindexing;
 \item absorption, binary absorption, Taylor identities, and
       Lemma~\ref{lem:taylor-binary};
 \item essential relations, arity reduction, and the block-regrouping
@@ -1456,7 +1475,7 @@ records where the statement proved here differs in strength or in hypotheses
 from the one in the source.
 
 \renewcommand{\arraystretch}{1.12}
-\begin{longtable}{@{}p{0.20\textwidth}p{0.30\textwidth}p{0.42\textwidth}@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.42\textwidth}@{}}
 \hline
 \textbf{\cite{BradyNotes}} & \textbf{This document} & \textbf{Difference}\\
 \hline

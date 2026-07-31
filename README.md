@@ -11,8 +11,9 @@ let `R ≤ A × B` be subdirect, and let
 C = { a ∈ A : {a} × B ⊆ R }
 ```
 
-be its *left center*. If `B` has a Taylor term and no proper binary absorbing
-subalgebra, then `C` centrally absorbs `A`, and some ternary term `s` satisfies
+be its *left center*. If `B` has a Taylor term and no nonempty proper binary
+absorbing subuniverse, then `C` centrally absorbs `A`, and some ternary term `s`
+satisfies
 
 ```
 s(C, A, C) ∪ s(C, C, A) ∪ s(A, C, C) ⊆ C.
@@ -29,7 +30,7 @@ absorption yields the *existence* of a ternary witness.
 
 | File | Pages | What it is |
 | --- | --- | --- |
-| [`zhuk_centers.tex`](zhuk_centers.tex) | 22 | The proof, written at formalization granularity, with a statement-level citation index, a suggested module order, an explicit imported-background appendix, and a concordance with the source. |
+| [`zhuk_centers.tex`](zhuk_centers.tex) | 23 | The proof, written at formalization granularity, with a statement-level citation index, a suggested module order, an explicit imported-background appendix, and a concordance with the source. |
 
 The compiled PDF is committed alongside the source.
 
@@ -110,20 +111,26 @@ suggested module order) is coarser and is maintained by hand.
 
 ## Status
 
-Second draft, revised after review. The review checked the two arguments the
-first draft flagged as riskiest — the block-regrouping induction (Lemma 3.6) and
-the minimality argument in the doubling trick (Step 1 of Lemma 7.1) — and found
-neither to be a gap. The real defects were elsewhere, and are now repaired:
+Third draft, after two rounds of review. Both rounds confirmed the central
+mathematics, including the two arguments the first draft flagged as riskiest —
+the block-regrouping induction (Lemma 3.6) and the minimality argument in the
+doubling trick (Step 1 of Lemma 7.1). The defects found were all in the
+foundations and in quantifier discipline, and are repaired:
 
-- **Term substitution was missing from the foundations.** The first draft
-  defined only variable renaming along a bijection, which does not cover
-  `t(x_{u(1)},…,x_{u(k)})`, the star powers, or `t(x₁,…,x₁,x₂,…,x₂)` — all of
-  which are simultaneous substitutions. Now Definition 1.9 with an evaluation
-  law (Lemma 1.10).
-- **The empty-center case was waved through.** Absorption by a *unary* term is
-  not vacuous when `C = ∅`, so the induction in Theorem 5.2 is now stated in the
-  same tuple form as the absorption definition, which removes the edge case
-  instead of case-splitting on it.
+- **Term substitution was missing.** The first draft defined only variable
+  renaming along a bijection, which covers none of the three constructions that
+  need it — `t(x_{u(1)},…,x_{u(k)})`, the star powers, and `t(x₁,…,x₁,x₂,…,x₂)`
+  are all simultaneous substitutions. Now Definition 1.9 with an evaluation law
+  (Lemma 1.10).
+- **Two theorems quantified over an unused center element.** Writing "for all
+  `c₁,…,c_k ∈ C`, replace `c_i` by `a ∈ A`" leaves `c_i` unused and makes the
+  statement vacuous when `C = ∅`, including at arity 1 where the intended
+  content is not vacuous. Theorems 5.1 and 5.2 are now stated over tuples
+  constrained coordinatewise, matching the absorption definition, so the
+  degenerate case dissolves rather than needing a detour.
+- **Products are indexed by arbitrary sets.** Theorem 3.9 forms `A^(A^m)` and
+  projects onto a subset of `A^m`, which the old ordered-product form of the
+  relational-constructions lemma did not cover.
 - Attribution corrected (Barto–Kazda for Part II), the concordance qualified
   where this document proves something weaker than the source, and the
   cross-reference index no longer claims to be a dependency graph.
