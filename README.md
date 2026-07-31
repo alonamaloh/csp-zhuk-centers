@@ -50,7 +50,9 @@ every box with one coordinate free and the rest confined to `S`, but misses the
 all-`S` box. It is exactly the obstruction to `m`-ary absorption: `S` absorbs
 with respect to an `m`-ary term precisely when no such relation exists. This
 equivalence is what later converts "absorbs at some arity" into "absorbs at
-arity 3", so it is proved here rather than cited.
+arity 3", so it is proved here rather than cited. Essentiality is defined
+relative to a partition of an arbitrary finite index set, which is what lets the
+free algebra `A^(A^m)` be fed to it directly.
 
 **Part III — the centers.** Applying a Taylor term of `B` to one element of `A`
 and several elements of `C` strictly enlarges its `R`-neighborhood in `B`, unless
@@ -111,12 +113,12 @@ suggested module order) is coarser and is maintained by hand.
 
 ## Status
 
-Fourth draft, after three rounds of review. Every round confirmed the central
-mathematics, including the two arguments the first draft flagged as riskiest —
-the block-regrouping induction (Lemma 3.7) and the minimality argument in the
-doubling trick (Step 1 of Lemma 7.1). The defects found were all in the
-foundations, in quantifier discipline, and in type-level transport, and are
-repaired:
+Fifth draft, after four rounds of review, the last from a second independent
+reviewer. Every round confirmed the central mathematics, including the two
+arguments the first draft flagged as riskiest — the block-regrouping induction
+(Lemma 3.7) and the minimality argument in the doubling trick (Step 1 of
+Lemma 7.1). The defects found were all in the foundations, in quantifier
+discipline, and in type-level bookkeeping, and are repaired:
 
 - **Term substitution was missing.** The first draft defined only variable
   renaming along a bijection, which covers none of the three constructions that
@@ -129,12 +131,15 @@ repaired:
   content is not vacuous. Theorems 5.1 and 5.2 are now stated over tuples
   constrained coordinatewise, matching the absorption definition, so the
   degenerate case dissolves rather than needing a detour.
-- **Products are indexed by arbitrary finite sets, with explicit transport.**
+- **Products, and essentiality, are indexed by arbitrary finite sets.**
   Theorem 3.10 forms `A^(A^m)` and projects onto a subset `X ⊆ A^m`, which the
-  old ordered-product form did not cover; and `A^X` is only *isomorphic* to the
-  grouped product `∏_j A^(X_j)`, so Lemma 1.19 now supplies the block-respecting
-  enumeration and the transport across it. Index sets are kept finite so the
-  foundational boundary stays at finite choice.
+  old ordered-product form did not cover. Defining essentiality relative to a
+  partition of an arbitrary finite index set (Definition 3.2) removed the need
+  for any transport lemma, and removed the "WLOG reorder the blocks" step from
+  the regrouping induction: an oversized block is shrunk in place. Index sets
+  are kept finite so the foundational boundary stays at finite choice.
+- **Standing hypotheses are a labelled convention** (Convention 1.2), not
+  prose, with an audit of where each is consumed.
 - Attribution corrected (Barto–Kazda for Part II), the concordance qualified
   where this document proves something weaker than the source, and the
   cross-reference index no longer claims to be a dependency graph.
